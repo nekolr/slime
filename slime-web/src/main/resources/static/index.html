@@ -6,12 +6,14 @@
 		<link rel="stylesheet" href="js/layui/css/layui.css" />
 		<link rel="stylesheet" id="theSkin" />
 		<link rel="stylesheet" href="css/index.css" />
+		<link rel="alternate icon" type="image/png" href="favicon.png">
 		<script type="text/javascript" src="js/layui/layui.all.js" ></script>
 		<script type="text/javascript" src="js/index.js" ></script>
+		<script>SLIME_VERSION = "0.0.1"</script>
 	</head>
 	<body class="layui-layout layui-layout-admin">
 		<div class="layui-header">
-			<div class="layui-logo">Slime</div>
+			<div class="layui-logo"></div>
 			<ul class="layui-nav layui-layout-left"></ul>
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item"><a target="_blank" href="https://www.spiderflow.org">帮助文档</a></li>
@@ -40,4 +42,7 @@
 		    </div>
 		</div>
 	</body>
+	<script>
+		$(".layui-logo").append('<span><img src="favicon.png" width="50px">Slime ' + SLIME_VERSION + '</span>');
+	</script>
 </html>
