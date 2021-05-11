@@ -1,0 +1,255 @@
+<div class="layui-tab layui-tab-fixed layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">基本配置</li>
+    <li>参数</li>
+	<li>Cookie</li>
+    <li>Header</li>
+  </ul>
+  <div class="layui-tab-content editor-form-node">
+    <div class="layui-tab-item layui-show">
+    	<form class="layui-form">
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">节点名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="value" placeholder="请输入节点名称" value="{{=d.value}}" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">循环变量</label>
+						<div class="layui-input-block">
+							<input type="text" name="loopIndex" placeholder="请输入循环变量" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.loopIndex}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">循环次数</label>
+						<div class="layui-input-block" codemirror="loopCount" placeholder="请输入循环次数" data-value="{{=d.data.object.loopCount}}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md2">
+					<div class="layui-form-item">
+						<label class="layui-form-label">请求方法</label>
+						<div class="layui-input-block">
+							<select name="method">
+								<option value="GET" {{d.data.object.method == 'GET' ? 'selected':''}}>GET</option>
+								<option value="POST" {{d.data.object.method == 'POST' ? 'selected':''}}>POST</option>
+								<option value="PUT" {{d.data.object.method == 'PUT' ? 'selected':''}}>PUT</option>
+								<option value="DELETE" {{d.data.object.method == 'DELETE' ? 'selected':''}}>DELETE</option>
+								<option value="PATCH" {{d.data.object.method == 'PATCH' ? 'selected':''}}>PATCH</option>
+								<option value="HEAD" {{d.data.object.method == 'HEAD' ? 'selected':''}}>HEAD</option>
+								<option value="OPTIONS" {{d.data.object.method == 'OPTIONS' ? 'selected':''}}>OPTIONS</option>
+								<option value="TRACE" {{d.data.object.method == 'TRACE' ? 'selected':''}}>TRACE</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md10">
+					<div class="layui-form-item">
+						<label class="layui-form-label">URL</label>
+						<div class="layui-input-block" codemirror="url" data-value="{{=d.data.object.url}}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">延迟时间</label>
+						<div class="layui-input-block">
+							<input type="text" name="sleep" placeholder="请输入延迟时间" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.sleep}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">超时时间</label>
+						<div class="layui-input-block">
+							<input type="text" name="request-timeout" placeholder="请输入超时时间" autocomplete="off" class="layui-input input-default" value="{{=d.data.object['request-timeout']}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">页面编码</label>
+						<div class="layui-input-block">
+							<input type="text" name="response-charset" placeholder="请输入页面编码" autocomplete="off" class="layui-input input-default" value="{{=d.data.object['response-charset']}}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">重试次数</label>
+						<div class="layui-input-block">
+							<input type="text" name="request-retry-count" placeholder="请输入重试次数" autocomplete="off" class="layui-input input-default" value="{{=d.data.object['request-retry-count']}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">重试间隔</label>
+						<div class="layui-input-block">
+							<input type="text" name="request-retry-interval" placeholder="请输入重试间隔" autocomplete="off" class="layui-input input-default" value="{{=d.data.object['request-retry-interval']}}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">代理</label>
+						<div class="layui-input-block" placeholder="host:port" codemirror="proxy" data-value="{{=d.data.object.proxy}}"></div>
+					</div>
+				</div>
+				<div class="layui-col-md8">
+					<div class="layui-form-item">
+						<label class="layui-form-label">请求设置</label>
+						<div class="layui-input-block">
+							<input type="checkbox" title="跟随重定向" value="request-follow-redirect" lay-skin="primary" {{d.data.object['request-follow-redirect'] == '0' ? '' : 'checked'}}/>
+							<input type="checkbox" title="自动管理Cookie" value="request-cookie-auto" lay-skin="primary" {{d.data.object['request-cookie-auto'] == '0' ? '' : 'checked'}}/>
+							<input type="checkbox" title="自动去重" value="repeat-enable" lay-skin="primary" {{d.data.object['repeat-enable'] == '1' ? 'checked' : ''}}/>
+							<input type="checkbox" title="重复不执行后续节点" value="repeat-ignore-execute" lay-skin="primary" {{d.data.object['repeat-ignore-execute'] == '1' ? 'checked' : ''}}/>
+						</div>
+					</div>
+				</div>
+			</div>
+    	</form>
+    </div>
+    <div class="layui-tab-item">
+    	<form class="layui-form">
+			<table class="layui-table" id="request-parameter" data-cell="{{=d.cell.id}}" data-keys="query-param-name,query-param-value,query-param-description"></table>
+	   		<div id="addParamterBtn" class="layui-form-item">
+	   			<div class="layui-input-inline">
+	    			<button class="layui-btn table-row-add" type="button" for="request-parameter">添加一个参数</button>
+	    		</div>
+				<div class="layui-input-inline">
+					<button class="layui-btn parameter-batch" type="button" for="request-parameter">批量设置参数</button>
+				</div>
+			</div>
+    	</form>
+    </div>
+	  <div class="layui-tab-item">
+		  <form class="layui-form">
+			  <table class="layui-table" id="request-cookie" data-cell="{{=d.cell.id}}" data-keys="cookie-name,cookie-value,cookie-description"></table>
+			  <div id="addCookieBtn" class="layui-form-item">
+				  <div class="layui-input-inline">
+					  <button class="layui-btn table-row-add" type="button" for="request-cookie">添加一个 Cookie</button>
+				  </div>
+				  <div class="layui-input-inline">
+					  <button class="layui-btn cookie-batch" type="button" for="request-cookie">批量设置 Cookie</button>
+				  </div>
+			  </div>
+		  </form>
+	  </div>
+    <div class="layui-tab-item">
+    	<form class="layui-form">
+			<table class="layui-table" id="request-header" data-cell="{{=d.cell.id}}" data-keys="header-name,header-value,header-description"></table>
+	   		<div id="addHeaderBtn" class="layui-form-item">
+	   			<div class="layui-input-inline">
+	    			<button class="layui-btn table-row-add" type="button" for="request-header">添加一个 Header</button>
+	    		</div>
+				<div class="layui-input-inline">
+					<button class="layui-btn header-batch" type="button" for="request-header">批量设置 Header</button>
+				</div>
+			</div>
+	    </form>
+    </div>
+  </div>
+</div>
+<script>
+	$(function(){
+		function renderRequestParameter(data){
+			layui.table.render({
+				elem : '#request-parameter',
+				limit: 50,
+				cols : [[{
+					title : '参数名',
+					width : 150,
+					templet : '#query-param-name-tmpl'
+				},{
+					title : '参数值',
+					templet : '#query-param-value-tmpl'
+				},{
+					title : '参数描述',
+					width : 250,
+					templet : '#query-param-description-tmpl'
+				},{
+					title : '操作',
+					width : 120,
+					align : 'center',
+					templet : '#common-operation'
+				}]],
+				data : data,
+				text : {
+					none : '暂未设置参数'
+				}
+			})
+		}
+		function renderRequestCookie(data){
+			layui.table.render({
+				elem : '#request-cookie',
+				limit: 50,
+				cols : [[{
+					title : 'Cookie 名',
+					width : 150,
+					templet : '#cookie-name-tmpl'
+				},{
+					title : 'Cookie 值',
+					templet : '#cookie-value-tmpl'
+				},{
+					title : '描述',
+					width : 250,
+					templet : '#cookie-description-tmpl'
+				},{
+					title : '操作',
+					width : 120,
+					align : 'center',
+					templet : '#common-operation'
+				}]],
+				data : data,
+				text : {
+					none : '暂未设置 Cookie'
+				}
+			})
+		}
+
+		function renderRequestHeader(data){
+			layui.table.render({
+				elem : '#request-header',
+				limit: 50,
+				cols : [[{
+					title : 'Header 名',
+					width : 150,
+					templet : '#header-name-tmpl'
+				},{
+					title : 'header 值',
+					minWidth : 400,
+					templet : '#header-value-tmpl'
+				},{
+					title : '描述',
+					width : 250,
+					templet : '#header-description-tmpl'
+				},{
+					title : '操作',
+					width : 120,
+					align : 'center',
+					templet : '#common-operation'
+				}]],
+				data : data,
+				text : {
+					none : '暂未设置 Header'
+				}
+			})
+		}
+		renderRequestParameter(getCellData({{d.cell.id}},$("#request-parameter").data('keys').split(",")));
+		renderRequestCookie(getCellData({{d.cell.id}},$("#request-cookie").data('keys').split(",")));
+		renderRequestHeader(getCellData({{d.cell.id}},$("#request-header").data('keys').split(",")));
+	});
+</script>

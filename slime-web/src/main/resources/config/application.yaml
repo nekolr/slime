@@ -1,0 +1,59 @@
+# server
+server:
+  address: 127.0.0.1
+  port: 8086
+  # tomcat
+  tomcat:
+    basedir: ${user.home}/slime/tmp
+
+# log
+logging:
+  level.com.github.nekolr.slime: info
+  file:
+    name: ${user.home}/slime/logs/slime.log
+
+# spring
+spring:
+  application:
+    name: slime
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # datasource
+  datasource:
+    url: jdbc:h2:file:~/slime/db;FILE_LOCK=FS
+    username: sa
+    password: sa
+  # jpa
+  jpa:
+    # hibernate
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: true
+  # cache
+  cache:
+    caffeine:
+      # initialCapacity     初始的缓存空间大小
+      # maximumSize         缓存的最大容量
+      # expireAfterWrite    最后一次写入后多久失效
+      # expireAfterAccess   距离最后一次访问或写入后多久失效
+      spec: initialCapacity=50,maximumSize=500,expireAfterWrite=3h,expireAfterAccess=3h
+
+# spider
+spider:
+  # 单个流程任务默认的最大线程数
+  default-threads: 8
+  # 死循环检测（只在测试流程时才会启用）
+  dead-cycle: 5000
+  # 工作目录
+  workspace: ${user.home}/slime
+  # 线程池
+  thread-pool:
+    # 线程池最大线程数
+    max-threads: 64
+  # 定时任务
+  job:
+    # 是否开启
+    enabled: true

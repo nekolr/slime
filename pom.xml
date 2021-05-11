@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.nekolr</groupId>
+    <artifactId>slime-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
+
+    <name>slime</name>
+    <url>https://github.com/nekolr/slime</url>
+    <description>A visual crawler management platform</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.5</version>
+    </parent>
+
+    <modules>
+        <module>slime-api</module>
+        <module>slime-core</module>
+        <module>slime-web</module>
+    </modules>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/nekolr/slime/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <alibaba.transmittable.version>2.12.0</alibaba.transmittable.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <fastjson.version>1.2.73</fastjson.version>
+        <commons.text.version>1.9</commons.text.version>
+        <commons.io.version>2.8.0</commons.io.version>
+        <commons.csv.version>1.8</commons.csv.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <jsoup.version>1.13.1</jsoup.version>
+        <xsoup.version>0.3.2</xsoup.version>
+        <!-- 项目版本号 -->
+        <revision>0.0.1</revision>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- commons 相关 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons.text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-csv</artifactId>
+                <version>${commons.csv.version}</version>
+            </dependency>
+            <!-- guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <!-- slime -->
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- jsoup -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+            <!-- xpath parser -->
+            <dependency>
+                <groupId>us.codecraft</groupId>
+                <artifactId>xsoup</artifactId>
+                <version>${xsoup.version}</version>
+            </dependency>
+            <!-- fastjson -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!-- transmittable-thread-local  -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${alibaba.transmittable.version}</version>
+            </dependency>
+            <!-- mapstruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
