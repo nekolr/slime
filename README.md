@@ -14,10 +14,10 @@ _✨ A visual crawler management platform ✨_
   <a href="https://github.com/nekolr/slime/releases">
     <img src="https://img.shields.io/github/v/release/nekolr/slime?style=flat-square&color=blueviolet&include_prereleases" alt="release">
   </a>
-  <a>
+  <a href="https://github.com/nekolr/slime/tags">
     <img src="https://img.shields.io/github/v/tag/nekolr/slime?style=flat-square" alt="tag">
   </a>
-  <a>
+  <a href="https://github.com/nekolr/slime">
     <img src="https://img.shields.io/github/stars/nekolr/slime?style=flat-square" alt="stars">
   </a>
 </p>
