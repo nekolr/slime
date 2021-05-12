@@ -1,11 +1,7 @@
 <p align="center">
   <a href="https://github.com/nekolr/slime"><img src="slime.svg" width="128" height="128" alt="logo"></a>
 </p>
-<div align="center">
 
-_✨ 一个可视化的爬虫平台 ✨_
-
-</div>
 
 <p align="center">
   <a href="https://github.com/nekolr/slime/blob/master/LICENSE">
