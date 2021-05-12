@@ -10,10 +10,10 @@ import javax.servlet.ServletException;
 
 @SpringBootApplication
 @EnableScheduling
-public class SlimeCoreApplication implements ServletContextInitializer {
+public class SlimeApplication implements ServletContextInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(SlimeCoreApplication.class, args);
+        SpringApplication.run(SlimeApplication.class, args);
     }
 
     @Override

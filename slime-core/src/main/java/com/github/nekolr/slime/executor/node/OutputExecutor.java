@@ -38,6 +38,37 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OutputExecutor implements NodeExecutor, SpiderListener {
 
+    /**
+     * 输出其他变量
+     */
+    String OUTPUT_OTHERS = "output-others";
+
+    /**
+     * 输出项的名称
+     */
+    String OUTPUT_NAME = "output-name";
+
+    /**
+     * 输出项的值
+     */
+    String OUTPUT_VALUE = "output-value";
+
+    /**
+     * 输出到数据库中的表名
+     */
+    String OUTPUT_TABLE_NAME = "tableName";
+
+    /**
+     * CSV 文件的名称
+     */
+    String OUTPUT_CSV_NAME = "csvName";
+
+    /**
+     * CSV 文件的编码
+     */
+    String OUTPUT_CSV_ENCODING = "csvEncoding";
+
+
     @Resource
     private DataSourceManager dataSourceManager;
 
@@ -61,10 +92,10 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
         output.setNodeId(node.getNodeId());
 
         // 是否需要输出其他变量（只在测试时输出）
-        boolean outputOthers = Constants.IS_OUTPUT_OTHERS.equals(node.getJsonProperty(Constants.OUTPUT_OTHERS));
+        boolean outputOthers = Constants.YES.equals(node.getJsonProperty(OUTPUT_OTHERS));
         // 获取输出目标
-        boolean isDatabase = Constants.IS_OUTPUT_DATABASE.equals(node.getJsonProperty(OutputType.DATABASE.getVariableName()));
-        boolean isCsv = Constants.IS_OUTPUT_CSV.equals(node.getJsonProperty(OutputType.CSV.getVariableName()));
+        boolean isDatabase = Constants.YES.equals(node.getJsonProperty(OutputType.DATABASE.getVariableName()));
+        boolean isCsv = Constants.YES.equals(node.getJsonProperty(OutputType.CSV.getVariableName()));
 
         // 如果需要输出其他变量
         if (outputOthers) {
@@ -102,11 +133,11 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
     private List<OutputItem> getOutputItems(Map<String, Object> variables, SpiderContext context, SpiderNode node) {
         List<OutputItem> outputItems = new ArrayList<>();
         // 获取用户设置的所有输出项
-        List<Map<String, String>> items = node.getJsonArrayProperty(Constants.OUTPUT_NAME, Constants.OUTPUT_VALUE);
+        List<Map<String, String>> items = node.getJsonArrayProperty(OUTPUT_NAME, OUTPUT_VALUE);
         for (Map<String, String> item : items) {
             Object value = null;
-            String itemName = item.get(Constants.OUTPUT_NAME);
-            String itemValue = item.get(Constants.OUTPUT_VALUE);
+            String itemName = item.get(OUTPUT_NAME);
+            String itemValue = item.get(OUTPUT_VALUE);
             try {
                 value = expressionParser.parse(itemValue, variables);
                 context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, itemName, value);
@@ -154,7 +185,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
         // 获取数据源 ID
         String dsId = node.getJsonProperty(Constants.DATASOURCE_ID);
         // 获取表名
-        String tableName = node.getJsonProperty(Constants.OUTPUT_TABLE_NAME);
+        String tableName = node.getJsonProperty(OUTPUT_TABLE_NAME);
 
         if (StringUtils.isBlank(dsId)) {
             log.warn("数据源 ID 不能为空");
@@ -204,7 +235,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
 
     private void outputCSV(SpiderNode node, SpiderContext context, List<OutputItem> outputItems) {
         // 获取文件名
-        String csvName = node.getJsonProperty(Constants.OUTPUT_CSV_NAME);
+        String csvName = node.getJsonProperty(OUTPUT_CSV_NAME);
         if (outputItems == null || outputItems.isEmpty()) {
             return;
         }
@@ -223,7 +254,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
                     if (printer == null) {
                         CSVFormat format = CSVFormat.DEFAULT.withHeader(headers.toArray(new String[headers.size()]));
                         FileOutputStream os = new FileOutputStream(spiderConfig.getWorkspace() + File.separator + csvName);
-                        String csvEncoding = node.getJsonProperty(Constants.OUTPUT_CSV_ENCODING);
+                        String csvEncoding = node.getJsonProperty(OUTPUT_CSV_ENCODING);
                         if ("UTF-8BOM".equals(csvEncoding)) {
                             csvEncoding = csvEncoding.substring(0, 5);
                             byte[] bom = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};

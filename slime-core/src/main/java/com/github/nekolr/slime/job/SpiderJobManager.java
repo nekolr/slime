@@ -3,17 +3,12 @@ package com.github.nekolr.slime.job;
 import com.github.nekolr.slime.Spider;
 import com.github.nekolr.slime.domain.SpiderFlow;
 import com.github.nekolr.slime.constant.Constants;
-import com.github.nekolr.slime.service.SpiderFlowService;
-import com.github.nekolr.slime.util.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @Slf4j
@@ -27,32 +22,6 @@ public class SpiderJobManager {
 
     @Resource
     private Scheduler quartzScheduler;
-
-    @Resource
-    private SpiderFlowService spiderFlowService;
-
-//    /**
-//     * 项目启动后自动添加需要执行的定时任务
-//     */
-//    @PostConstruct
-//    private void initializeJobs() {
-//        // 清空所有流程的下次执行时间
-//        spiderFlowService.clearNextExecuteTime();
-//        // 获取所有启用定时任务的流程
-//        List<SpiderFlow> flows = spiderFlowService.findByJobEnabled(Boolean.TRUE);
-//        if (flows != null && !flows.isEmpty()) {
-//            for (SpiderFlow flow : flows) {
-//                if (StringUtils.isNotBlank(flow.getCron())) {
-//                    Date nextTime = addJob(flow);
-//                    log.info("初始化定时任务：{}，下次执行时间：{}", flow.getName(), TimeUtils.format(nextTime));
-//                    if (nextTime != null) {
-//                        flow.setNextExecuteTime(nextTime);
-//                        spiderFlowService.updateNextExecuteTime(flow);
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     /**
      * 创建定时任务

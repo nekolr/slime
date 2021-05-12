@@ -32,6 +32,92 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RequestExecutor implements NodeExecutor, Grammarly {
 
+    /**
+     * 请求的延迟时间
+     */
+    private static final String REQUEST_SLEEP = "sleep";
+
+    /**
+     * 请求的 URL
+     */
+    private static final String REQUEST_URL = "url";
+
+    /**
+     * 请求的代理
+     */
+    private static final String REQUEST_PROXY = "proxy";
+
+    /**
+     * 请求的方法
+     */
+    private static final String REQUEST_METHOD = "method";
+
+    /**
+     * 请求的查询参数名称
+     */
+    private static final String REQUEST_QUERY_PARAM_NAME = "query-param-name";
+
+    /**
+     * 请求的查询参数值
+     */
+    private static final String REQUEST_QUERY_PARAM_VALUE = "query-param-value";
+
+    /**
+     * 请求的 Cookie 名称
+     */
+    private static final String REQUEST_COOKIE_NAME = "cookie-name";
+
+    /**
+     * 请求的 Cookie 值
+     */
+    private static final String REQUEST_COOKIE_VALUE = "cookie-value";
+
+    /**
+     * 请求头名称
+     */
+    private static final String REQUEST_HEADER_NAME = "header-name";
+
+    /**
+     * 请求头的值
+     */
+    private static final String REQUEST_HEADER_VALUE = "header-value";
+
+    /**
+     * 请求超时时间
+     */
+    private static final String REQUEST_TIMEOUT = "request-timeout";
+
+    /**
+     * 请求失败后的重试次数
+     */
+    private static final String REQUEST_RETRY_COUNT = "request-retry-count";
+
+    /**
+     * 重试间隔
+     */
+    private static final String REQUEST_RETRY_INTERVAL = "request-retry-interval";
+
+    /**
+     * 跟随重定向
+     */
+    private static final String REQUEST_FOLLOW_REDIRECT = "request-follow-redirect";
+
+    /**
+     * 自动管理 Cookie
+     */
+    private static final String REQUEST_AUTO_COOKIE = "request-cookie-auto";
+
+    /**
+     * 随机 User-Agent
+     */
+    private static final String RANDOM_USERAGENT = "request-random-useragent";
+
+    /**
+     * 响应内容编码
+     */
+    private static final String RESPONSE_CHARSET = "response-charset";
+
+
     @Resource
     private ExpressionParser expressionParser;
 
@@ -45,9 +131,9 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
 
     private void doExecute(SpiderNode node, SpiderContext context, Map<String, Object> variables) {
         // 重试次数
-        int retryCount = NumberUtils.toInt(node.getJsonProperty(Constants.REQUEST_RETRY_COUNT), 0);
+        int retryCount = NumberUtils.toInt(node.getJsonProperty(REQUEST_RETRY_COUNT), 0);
         // 重试间隔，单位毫秒
-        long retryInterval = NumberUtils.toLong(node.getJsonProperty(Constants.REQUEST_RETRY_INTERVAL), 0L);
+        long retryInterval = NumberUtils.toLong(node.getJsonProperty(REQUEST_RETRY_INTERVAL), 0L);
 
         boolean success = false;
         for (int i = 0; i < retryCount + 1 && !success; i++) {
@@ -75,14 +161,14 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
                 HttpResponse response = request.execute();
                 if (success = response.getStatusCode() == 200) {
                     // 设置响应编码
-                    String charset = node.getJsonProperty(Constants.RESPONSE_CHARSET);
+                    String charset = node.getJsonProperty(RESPONSE_CHARSET);
                     if (StringUtils.isNotBlank(charset)) {
                         response.setCharset(charset);
                         log.debug("设置响应的编码：{}", charset);
                     }
                     // 是否自动管理 Cookie
-                    String cookeAuto = node.getJsonProperty(Constants.REQUEST_AUTO_COOKIE);
-                    if (Constants.COOKIE_AUTO.equals(cookeAuto)) {
+                    String cookeAuto = node.getJsonProperty(REQUEST_AUTO_COOKIE);
+                    if (Constants.YES.equals(cookeAuto)) {
                         // 将响应的 Cookie 放入 Cookie 上下文中
                         context.getCookieContext().putAll(response.getCookies());
                     }
@@ -119,14 +205,14 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      * @param variables 传递的变量与值
      */
     private void setupProxy(HttpRequest request, SpiderNode node, SpiderContext context, Map<String, Object> variables) {
-        String proxy = node.getJsonProperty(Constants.REQUEST_PROXY);
+        String proxy = node.getJsonProperty(REQUEST_PROXY);
         if (StringUtils.isNotBlank(proxy)) {
             try {
                 Object value = expressionParser.parse(proxy, variables);
                 if (value != null) {
                     String[] proxyArr = StringUtils.split((String) value, Constants.PROXY_HOST_PORT_SEPARATOR);
                     if (proxyArr.length == 2) {
-                        context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, Constants.REQUEST_PROXY, value);
+                        context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, REQUEST_PROXY, value);
                         log.info("设置代理地址：{}", value);
                         request.proxy(proxyArr[0], Integer.parseInt(proxyArr[1]));
                     }
@@ -150,24 +236,24 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
         SpiderNode root = context.getRoot();
 
         // 根节点（全局）的 Cookie
-        Map<String, String> cookies = this.getCookies(root.getJsonArrayProperty(Constants.REQUEST_COOKIE_NAME, Constants.REQUEST_COOKIE_VALUE), context, root, variables);
+        Map<String, String> cookies = this.getCookies(root.getJsonArrayProperty(REQUEST_COOKIE_NAME, REQUEST_COOKIE_VALUE), context, root, variables);
         request.cookies(cookies);
 
         // Cookie 上下文，包含之前设置的 Cookie
         Map<String, String> cookieContext = context.getCookieContext();
-        String cookeAuto = node.getJsonProperty(Constants.REQUEST_AUTO_COOKIE);
-        if (Constants.COOKIE_AUTO.equals(cookeAuto) && !context.getCookieContext().isEmpty()) {
-            context.pause(node.getNodeId(), WebSocketEvent.REQUEST_AUTO_COOKIE_EVENT, Constants.REQUEST_AUTO_COOKIE, cookieContext);
+        String cookeAuto = node.getJsonProperty(REQUEST_AUTO_COOKIE);
+        if (Constants.YES.equals(cookeAuto) && !context.getCookieContext().isEmpty()) {
+            context.pause(node.getNodeId(), WebSocketEvent.REQUEST_AUTO_COOKIE_EVENT, REQUEST_AUTO_COOKIE, cookieContext);
             request.cookies(cookieContext);
             log.info("自动设置 Cookies：{}", cookieContext);
         }
 
         // 当前节点的 Cookie
-        cookies = this.getCookies(node.getJsonArrayProperty(Constants.REQUEST_COOKIE_NAME, Constants.REQUEST_COOKIE_VALUE), context, node, variables);
+        cookies = this.getCookies(node.getJsonArrayProperty(REQUEST_COOKIE_NAME, REQUEST_COOKIE_VALUE), context, node, variables);
         request.cookies(cookies);
 
         // 将当前设置的全局 Cookie 和节点 Cookie 都放入 Cookie 上下文中
-        if (Constants.COOKIE_AUTO.equals(cookeAuto)) {
+        if (Constants.YES.equals(cookeAuto)) {
             cookieContext.putAll(cookies);
         }
     }
@@ -183,9 +269,9 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
         Map<String, String> result = new HashMap<>();
         if (cookies != null) {
             for (Map<String, String> cookie : cookies) {
-                String cookieName = cookie.get(Constants.REQUEST_COOKIE_NAME);
+                String cookieName = cookie.get(REQUEST_COOKIE_NAME);
                 if (StringUtils.isNotBlank(cookieName)) {
-                    String cookieValue = cookie.get(Constants.REQUEST_COOKIE_VALUE);
+                    String cookieValue = cookie.get(REQUEST_COOKIE_VALUE);
                     try {
                         Object value = expressionParser.parse(cookieValue, variables);
                         result.put(cookieName, (String) value);
@@ -212,10 +298,10 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
         // 获取根节点
         SpiderNode root = context.getRoot();
         // 设置根节点（全局）的查询参数
-        List<Map<String, String>> rootParams = root.getJsonArrayProperty(Constants.REQUEST_QUERY_PARAM_NAME, Constants.REQUEST_QUERY_PARAM_VALUE);
+        List<Map<String, String>> rootParams = root.getJsonArrayProperty(REQUEST_QUERY_PARAM_NAME, REQUEST_QUERY_PARAM_VALUE);
         this.setQueryParams(request, root, rootParams, context, variables);
         // 设置当前节点的查询参数
-        List<Map<String, String>> params = node.getJsonArrayProperty(Constants.REQUEST_QUERY_PARAM_NAME, Constants.REQUEST_QUERY_PARAM_VALUE);
+        List<Map<String, String>> params = node.getJsonArrayProperty(REQUEST_QUERY_PARAM_NAME, REQUEST_QUERY_PARAM_VALUE);
         this.setQueryParams(request, node, params, context, variables);
     }
 
@@ -229,9 +315,9 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
     private void setQueryParams(HttpRequest request, SpiderNode node, List<Map<String, String>> params, SpiderContext context, Map<String, Object> variables) {
         if (params != null) {
             for (Map<String, String> param : params) {
-                String paramName = param.get(Constants.REQUEST_QUERY_PARAM_NAME);
+                String paramName = param.get(REQUEST_QUERY_PARAM_NAME);
                 if (StringUtils.isNotBlank(paramName)) {
-                    String paramValue = param.get(Constants.REQUEST_QUERY_PARAM_VALUE);
+                    String paramValue = param.get(REQUEST_QUERY_PARAM_VALUE);
                     try {
                         Object value = expressionParser.parse(paramValue, variables);
                         request.data(paramName, value);
@@ -258,10 +344,10 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
         // 获取根节点
         SpiderNode root = context.getRoot();
         // 设置根节点（全局）的头部信息
-        List<Map<String, String>> rootHeaders = root.getJsonArrayProperty(Constants.REQUEST_HEADER_NAME, Constants.REQUEST_HEADER_VALUE);
+        List<Map<String, String>> rootHeaders = root.getJsonArrayProperty(REQUEST_HEADER_NAME, REQUEST_HEADER_VALUE);
         this.setHeaders(request, rootHeaders, context, root, variables);
         // 设置当前节点的头部信息
-        List<Map<String, String>> headers = node.getJsonArrayProperty(Constants.REQUEST_HEADER_NAME, Constants.REQUEST_HEADER_VALUE);
+        List<Map<String, String>> headers = node.getJsonArrayProperty(REQUEST_HEADER_NAME, REQUEST_HEADER_VALUE);
         this.setHeaders(request, headers, context, node, variables);
     }
 
@@ -275,9 +361,9 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
     private void setHeaders(HttpRequest request, List<Map<String, String>> headers, SpiderContext context, SpiderNode node, Map<String, Object> variables) {
         if (headers != null) {
             for (Map<String, String> header : headers) {
-                String headerName = header.get(Constants.REQUEST_HEADER_NAME);
+                String headerName = header.get(REQUEST_HEADER_NAME);
                 if (StringUtils.isNotBlank(headerName)) {
-                    String headerValue = header.get(Constants.REQUEST_HEADER_VALUE);
+                    String headerValue = header.get(REQUEST_HEADER_VALUE);
                     try {
                         Object value = expressionParser.parse(headerValue, variables);
                         request.header(headerName, value);
@@ -298,8 +384,8 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      * @param node    节点
      */
     private void setupFollowRedirects(HttpRequest request, SpiderNode node) {
-        String followRedirect = node.getJsonProperty(Constants.REQUEST_FOLLOW_REDIRECT, Constants.FOLLOW_REDIRECT);
-        boolean following = followRedirect.equals(Constants.FOLLOW_REDIRECT);
+        String followRedirect = node.getJsonProperty(REQUEST_FOLLOW_REDIRECT);
+        boolean following = Constants.YES.equals(followRedirect);
         log.debug("设置是否跟随重定向：{}", following);
         request.followRedirects(following);
     }
@@ -311,7 +397,7 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      * @param node    节点
      */
     private void setupMethod(HttpRequest request, SpiderNode node) {
-        String method = node.getJsonProperty(Constants.REQUEST_METHOD, "GET");
+        String method = node.getJsonProperty(REQUEST_METHOD, "GET");
         log.debug("设置请求方法：{}", method);
         request.method(method);
     }
@@ -324,7 +410,7 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      */
     private void setupTimeout(HttpRequest request, SpiderNode node) {
         // 默认 30s
-        int timeout = NumberUtils.toInt(node.getJsonProperty(Constants.REQUEST_TIMEOUT), 30000);
+        int timeout = NumberUtils.toInt(node.getJsonProperty(REQUEST_TIMEOUT), 30000);
         log.debug("设置请求超时时间：{} ms", timeout);
         request.timeout(timeout);
     }
@@ -339,8 +425,8 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
     private String setupUrl(HttpRequest request, SpiderNode node, SpiderContext context, Map<String, Object> variables) {
         String url = null;
         try {
-            url = (String) expressionParser.parse(node.getJsonProperty(Constants.REQUEST_URL), variables);
-            context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, Constants.REQUEST_URL, url);
+            url = (String) expressionParser.parse(node.getJsonProperty(REQUEST_URL), variables);
+            context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, REQUEST_URL, url);
             log.info("设置请求 URL：{}", url);
             request.url(url);
         } catch (Exception e) {
@@ -359,7 +445,7 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      */
     private void setupSleepTime(SpiderNode node, SpiderContext context) {
         // 获取睡眠时间
-        String sleep = node.getJsonProperty(Constants.REQUEST_SLEEP);
+        String sleep = node.getJsonProperty(REQUEST_SLEEP);
         long sleepTime = NumberUtils.toLong(sleep, 0L);
         try {
             // 实际等待的时间 = 上次执行的时间 + 睡眠的时间 - 当前时间
@@ -368,7 +454,7 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
                 sleepTime = lastTime + sleepTime - System.currentTimeMillis();
             }
             if (sleepTime > 0) {
-                context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, Constants.REQUEST_SLEEP, sleepTime);
+                context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, REQUEST_SLEEP, sleepTime);
                 log.debug("设置延迟时间：{} ms", sleepTime);
                 // 睡眠
                 TimeUnit.MILLISECONDS.sleep(sleepTime);

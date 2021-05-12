@@ -52,7 +52,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <finalName>slime</finalName>
-                    <mainClass>com.github.nekolr.slime.SlimeCoreApplication</mainClass>
+                    <mainClass>com.github.nekolr.slime.SlimeApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

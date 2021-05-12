@@ -32,6 +32,22 @@ import java.util.*;
 @Slf4j
 public class SQLExecutor implements NodeExecutor, Grammarly {
 
+    /**
+     * SQL
+     */
+    String SQL = "sql";
+
+    /**
+     * 语句类型
+     */
+    String STATEMENT_TYPE = "statementType";
+
+    /**
+     * 是否输出到 SqlRowSet
+     */
+    String SELECT_RESULT_SQL_ROW_SET = "isSqlRowSet";
+
+
     public static final String STATEMENT_SELECT = "select";
     public static final String STATEMENT_SELECT_ONE = "selectOne";
     public static final String STATEMENT_SELECT_INT = "selectInt";
@@ -49,7 +65,7 @@ public class SQLExecutor implements NodeExecutor, Grammarly {
     @Override
     public void execute(SpiderNode node, SpiderContext context, Map<String, Object> variables) {
         String dsId = node.getJsonProperty(Constants.DATASOURCE_ID);
-        String sql = node.getJsonProperty(Constants.SQL);
+        String sql = node.getJsonProperty(SQL);
         if (StringUtils.isBlank(dsId)) {
             log.warn("数据源 ID 不能为空");
         } else if (StringUtils.isBlank(sql)) {
@@ -66,7 +82,7 @@ public class SQLExecutor implements NodeExecutor, Grammarly {
                     return;
                 }
                 sql = sqlObject.toString();
-                context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, Constants.SQL, sql);
+                context.pause(node.getNodeId(), WebSocketEvent.COMMON_EVENT, SQL, sql);
             } catch (Exception e) {
                 log.error("获取 sql 出错", e);
                 ExceptionUtils.wrapAndThrow(e);
@@ -91,10 +107,10 @@ public class SQLExecutor implements NodeExecutor, Grammarly {
                 params[i] = parameter;
             }
 
-            String statementType = node.getJsonProperty(Constants.STATEMENT_TYPE);
+            String statementType = node.getJsonProperty(STATEMENT_TYPE);
             log.debug("执行 sql：{}", sql);
             if (STATEMENT_SELECT.equals(statementType)) {
-                boolean isSqlRowSet = Constants.IS_SQL_ROW_SET.equals(node.getJsonProperty(Constants.SELECT_RESULT_SQL_ROW_SET));
+                boolean isSqlRowSet = Constants.YES.equals(node.getJsonProperty(SELECT_RESULT_SQL_ROW_SET));
                 try {
                     if (isSqlRowSet) {
                         variables.put(Constants.SQL_RESULT, template.queryForRowSet(sql, params));

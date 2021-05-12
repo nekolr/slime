@@ -153,7 +153,7 @@ public class SpiderNode {
     public boolean needTransmit(String fromNodeId) {
         String value = this.transmitVariables.get(fromNodeId);
         // 如果值为空则默认需要传递变量
-        return StringUtils.isBlank(value) || Constants.NEED_TRANSMIT_VARIABLE.equals(value);
+        return StringUtils.isBlank(value) || Constants.YES.equals(value);
     }
 
     /**

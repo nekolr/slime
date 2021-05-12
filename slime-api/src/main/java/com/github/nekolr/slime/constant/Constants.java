@@ -90,119 +90,9 @@ public interface Constants {
     String NODE_LOOP_END_INDEX = "loopEndIndex";
 
     /**
-     * 请求的延迟时间
-     */
-    String REQUEST_SLEEP = "sleep";
-
-    /**
-     * 请求的 URL
-     */
-    String REQUEST_URL = "url";
-
-    /**
-     * 请求的代理
-     */
-    String REQUEST_PROXY = "proxy";
-
-    /**
-     * 请求的方法
-     */
-    String REQUEST_METHOD = "method";
-
-    /**
-     * 请求的查询参数名称
-     */
-    String REQUEST_QUERY_PARAM_NAME = "query-param-name";
-
-    /**
-     * 请求的查询参数值
-     */
-    String REQUEST_QUERY_PARAM_VALUE = "query-param-value";
-
-    /**
-     * 请求的 Cookie 名称
-     */
-    String REQUEST_COOKIE_NAME = "cookie-name";
-
-    /**
-     * 请求的 Cookie 值
-     */
-    String REQUEST_COOKIE_VALUE = "cookie-value";
-
-    /**
-     * 请求头名称
-     */
-    String REQUEST_HEADER_NAME = "header-name";
-
-    /**
-     * 请求头的值
-     */
-    String REQUEST_HEADER_VALUE = "header-value";
-
-    /**
-     * 请求超时时间
-     */
-    String REQUEST_TIMEOUT = "request-timeout";
-
-    /**
-     * 请求失败后的重试次数
-     */
-    String REQUEST_RETRY_COUNT = "request-retry-count";
-
-    /**
-     * 重试间隔
-     */
-    String REQUEST_RETRY_INTERVAL = "request-retry-interval";
-
-    /**
-     * 跟随重定向
-     */
-    String REQUEST_FOLLOW_REDIRECT = "request-follow-redirect";
-
-    /**
-     * 自动管理 Cookie
-     */
-    String REQUEST_AUTO_COOKIE = "request-cookie-auto";
-
-    /**
-     * 响应内容编码
-     */
-    String RESPONSE_CHARSET = "response-charset";
-
-    /**
-     * 变量名称
-     */
-    String VARIABLE_NAME = "variable-name";
-
-    /**
-     * 变量值
-     */
-    String VARIABLE_VALUE = "variable-value";
-
-    /**
      * 函数
      */
     String FUNCTION = "function";
-
-    /**
-     * 数据源 ID
-     */
-    String DATASOURCE_ID = "datasourceId";
-
-    /**
-     * SQL
-     */
-    String SQL = "sql";
-
-    /**
-     * 语句类型
-     */
-    String STATEMENT_TYPE = "statementType";
-
-    /**
-     * 是否输出到 SqlRowSet
-     */
-    String SELECT_RESULT_SQL_ROW_SET = "isSqlRowSet";
 
     /**
      * 流程 ID
@@ -210,79 +100,16 @@ public interface Constants {
     String FLOW_ID = "flowId";
 
     /**
-     * 输出其他变量
+     * 数据源 ID
      */
-    String OUTPUT_OTHERS = "output-others";
-
-    /**
-     * 输出项的名称
-     */
-    String OUTPUT_NAME = "output-name";
-
-    /**
-     * 输出项的值
-     */
-    String OUTPUT_VALUE = "output-value";
-
-    /**
-     * 输出到数据库中的表名
-     */
-    String OUTPUT_TABLE_NAME = "tableName";
-
-    /**
-     * CSV 文件的名称
-     */
-    String OUTPUT_CSV_NAME = "csvName";
-
-    /**
-     * CSV 文件的编码
-     */
-    String OUTPUT_CSV_ENCODING = "csvEncoding";
+    String DATASOURCE_ID = "datasourceId";
 
 
     //*************************************************************************************
     //                                 Node Property Value
     //*************************************************************************************
 
-    /**
-     * 需要将上一节点的变量和值传递到当前节点
-     */
-    String NEED_TRANSMIT_VARIABLE = "1";
-
-    /**
-     * 跟随重定向
-     */
-    String FOLLOW_REDIRECT = "1";
-
-    /**
-     * 跟随重定向
-     */
-    String COOKIE_AUTO = "1";
-
-    /**
-     * 同步执行
-     */
-    String IS_RUN_SYNC = "1";
-
-    /**
-     * 输出到 SqlRowSet 流
-     */
-    String IS_SQL_ROW_SET = "1";
-
-    /**
-     * 输出其他变量
-     */
-    String IS_OUTPUT_OTHERS = "1";
-
-    /**
-     * 输出到数据库
-     */
-    String IS_OUTPUT_DATABASE = "1";
-
-    /**
-     * 输出到 CSV 文件
-     */
-    String IS_OUTPUT_CSV = "1";
+    String YES = "1";
 
 
     //*************************************************************************************

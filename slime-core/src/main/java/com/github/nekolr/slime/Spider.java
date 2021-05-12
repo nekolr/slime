@@ -342,7 +342,7 @@ public class Spider {
                 // 获取根节点
                 SpiderNode root = context.getRoot();
                 // 是否需要同步执行
-                boolean runSync = Constants.IS_RUN_SYNC.equals(root.getJsonProperty(Constants.RUN_SYNC));
+                boolean runSync = Constants.YES.equals(root.getJsonProperty(Constants.RUN_SYNC));
                 if (executor.isAsync() && !runSync) {
                     // 可以异步执行，则提交到线程池
                     taskQueue.add(context.getSubThreadPool().submitAsync(task.runnable, task));
