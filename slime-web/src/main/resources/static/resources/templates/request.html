@@ -113,7 +113,8 @@
 						<label class="layui-form-label">请求设置</label>
 						<div class="layui-input-block">
 							<input type="checkbox" title="跟随重定向" value="request-follow-redirect" lay-skin="primary" {{d.data.object['request-follow-redirect'] == '0' ? '' : 'checked'}}/>
-							<input type="checkbox" title="自动管理Cookie" value="request-cookie-auto" lay-skin="primary" {{d.data.object['request-cookie-auto'] == '0' ? '' : 'checked'}}/>
+							<input type="checkbox" title="自动管理 Cookie" value="request-cookie-auto" lay-skin="primary" {{d.data.object['request-cookie-auto'] == '0' ? '' : 'checked'}}/>
+							<input type="checkbox" title="使用随机 User-Agent" value="request-random-useragent" lay-skin="primary" {{d.data.object['request-random-useragent'] == '0' ? '' : 'checked'}}/>
 							<input type="checkbox" title="自动去重" value="repeat-enable" lay-skin="primary" {{d.data.object['repeat-enable'] == '1' ? 'checked' : ''}}/>
 							<input type="checkbox" title="重复不执行后续节点" value="repeat-ignore-execute" lay-skin="primary" {{d.data.object['repeat-ignore-execute'] == '1' ? 'checked' : ''}}/>
 						</div>

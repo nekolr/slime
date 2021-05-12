@@ -5,6 +5,7 @@ import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.context.SpiderContext;
 import com.github.nekolr.slime.model.Grammar;
 import com.github.nekolr.slime.model.SpiderNode;
+import com.github.nekolr.slime.util.UserAgentManager;
 import com.github.nekolr.slime.websocket.WebSocketEvent;
 import com.github.nekolr.slime.executor.NodeExecutor;
 import com.github.nekolr.slime.io.HttpRequest;
@@ -121,6 +122,10 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
     @Resource
     private ExpressionParser expressionParser;
 
+    @Resource
+    private UserAgentManager userAgentManager;
+
+
     @Override
     public void execute(SpiderNode node, SpiderContext context, Map<String, Object> variables) {
         // 设置延迟时间
@@ -146,6 +151,8 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
             this.setupMethod(request, node);
             // 设置是否跟随重定向
             this.setupFollowRedirects(request, node);
+            // 设置随机 User-Agent
+            this.setupRandomUserAgent(request, node);
             // 设置头部信息
             this.setupHeaders(request, node, context, variables);
             // 设置 Cookies
@@ -328,6 +335,21 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 设置随机 User-Agent
+     *
+     * @param request 请求包装对象
+     */
+    private void setupRandomUserAgent(HttpRequest request, SpiderNode node) {
+        // 是否使用随机 User-Agent
+        boolean randomUserAgent = Constants.YES.equals(node.getJsonProperty(RANDOM_USERAGENT));
+        if (randomUserAgent) {
+            String userAgent = userAgentManager.getRandom();
+            log.info("设置请求 Header：{} = {}", "User-Agent", userAgent);
+            request.header("User-Agent", userAgent);
         }
     }
 
