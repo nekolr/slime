@@ -1,4 +1,4 @@
-package com.github.nekolr.slime.util;
+package com.github.nekolr.slime.support;
 
 import com.github.nekolr.slime.executor.NodeExecutor;
 import com.github.nekolr.slime.model.Shape;

@@ -147,6 +147,11 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
     }
 
     @Override
+    public Page<SpiderFlow> findAll(Pageable pageable) {
+        return spiderFlowRepository.findAll(pageable);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateNextExecuteTime(SpiderFlow flow) {
         spiderFlowRepository.updateNextExecuteTime(flow.getNextExecuteTime(), flow.getId());
@@ -185,7 +190,7 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
         try {
             trigger = TriggerBuilder.newTrigger().withSchedule(CronScheduleBuilder.cronSchedule(cron)).build();
         } catch (Exception e) {
-            throw new RuntimeException("cron 表达式 " + cron + " 有误：");
+            throw new RuntimeException("cron 表达式 " + cron + " 有误");
         }
         List<Date> dates = TriggerUtils.computeFireTimes((OperableTrigger) trigger, null, numTimes);
         for (Date date : dates) {

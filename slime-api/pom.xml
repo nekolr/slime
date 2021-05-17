@@ -47,7 +47,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${commons.io.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -66,6 +65,11 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
         </dependency>
     </dependencies>
 

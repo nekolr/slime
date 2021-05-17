@@ -25,8 +25,18 @@ public class SpiderTaskServiceImpl implements SpiderTaskService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(SpiderTask task) {
-        spiderTaskRepository.save(task);
+    public SpiderTask save(SpiderTask task) {
+        return spiderTaskRepository.save(task);
+    }
+
+    @Override
+    public Page<SpiderTask> findAll(Pageable pageable) {
+        return spiderTaskRepository.findAll(pageable);
+    }
+
+    @Override
+    public SpiderTask getById(Long id) {
+        return spiderTaskRepository.findById(id).orElse(null);
     }
 
     @Override

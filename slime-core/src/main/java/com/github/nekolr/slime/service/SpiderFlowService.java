@@ -8,17 +8,13 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 
-public interface SpiderFlowService {
-
-    SpiderFlow getById(Long id);
+public interface SpiderFlowService extends BaseService<SpiderFlow> {
 
     void executeCountIncrement(Long id, Date lastExecuteTime, Date nextExecuteTime);
 
     void clearNextExecuteTime();
 
     List<SpiderFlow> findByJobEnabled(Boolean jobEnabled);
-
-    SpiderFlow save(SpiderFlow flow);
 
     void updateNextExecuteTime(SpiderFlow flow);
 
@@ -29,8 +25,6 @@ public interface SpiderFlowService {
     List<SpiderFlow> findAll();
 
     List<SpiderFlow> findOtherFlows(Long id);
-
-    void removeById(Long id);
 
     void run(Long id);
 

@@ -5,7 +5,7 @@ import com.github.nekolr.slime.domain.dto.DataSourceDTO.Test;
 import com.github.nekolr.slime.domain.dto.DataSourceDTO.Save;
 import com.github.nekolr.slime.service.DataSourceService;
 import com.github.nekolr.slime.support.PageRequest;
-import com.github.nekolr.slime.util.DataSourceManager;
+import com.github.nekolr.slime.support.DataSourceManager;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

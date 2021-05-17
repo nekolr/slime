@@ -6,7 +6,7 @@ import com.github.nekolr.slime.model.Shape;
 import com.github.nekolr.slime.io.Line;
 import com.github.nekolr.slime.service.SpiderFlowService;
 import com.github.nekolr.slime.support.PageRequest;
-import com.github.nekolr.slime.util.ExecutorFactory;
+import com.github.nekolr.slime.support.ExecutorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

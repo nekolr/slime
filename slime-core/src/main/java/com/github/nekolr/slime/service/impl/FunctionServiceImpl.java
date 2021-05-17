@@ -51,15 +51,21 @@ public class FunctionServiceImpl implements FunctionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(Function function) {
+    public Function save(Function function) {
         try {
             ScriptManager.validScript(function.getName(), function.getParameter(), function.getScript());
-            functionRepository.save(function);
+            Function entity = functionRepository.save(function);
             // 重新加载自定义函数
             initializeFunctions();
+            return entity;
         } catch (Exception e) {
             throw new RuntimeException("自定义函数不符合规范");
         }
+    }
+
+    @Override
+    public Page<Function> findAll(Pageable pageable) {
+        return functionRepository.findAll(pageable);
     }
 
     @Override

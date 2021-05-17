@@ -29,9 +29,10 @@ public class VariableServiceImpl implements VariableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(Variable entity) {
-        variableRepository.save(entity);
+    public Variable save(Variable entity) {
+        Variable variable = variableRepository.save(entity);
         this.resetGlobalVariables();
+        return variable;
     }
 
     @Override

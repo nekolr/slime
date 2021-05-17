@@ -1,4 +1,4 @@
-package com.github.nekolr.slime.util;
+package com.github.nekolr.slime.support;
 
 import com.github.nekolr.slime.domain.dto.DataSourceDTO;
 import com.github.nekolr.slime.service.DataSourceService;

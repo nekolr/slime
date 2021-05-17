@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Connection;
@@ -45,11 +46,13 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
-    public void save(DataSourceDTO dataSource) {
-        dataSourceRepository.save(mapper.toEntity(dataSource));
+    @Transactional(rollbackFor = Exception.class)
+    public DataSourceDTO save(DataSourceDTO dataSource) {
+        return mapper.toDto(dataSourceRepository.save(mapper.toEntity(dataSource)));
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeById(Long id) {
         dataSourceRepository.deleteById(id);
     }

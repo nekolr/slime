@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface SpiderFlowRepository extends JpaRepository<SpiderFlow, Long>, JpaSpecificationExecutor {
+public interface SpiderFlowRepository extends JpaRepository<SpiderFlow, Long>, JpaSpecificationExecutor<SpiderFlow> {
 
     List<SpiderFlow> findByJobEnabled(Boolean jobEnabled);
 
