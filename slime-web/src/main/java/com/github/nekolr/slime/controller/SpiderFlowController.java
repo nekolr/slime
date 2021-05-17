@@ -31,14 +31,18 @@ public class SpiderFlowController {
     private List<Pluggable> pluginConfigs;
 
     @Resource
-    private ExecutorFactory executorFactory;
-
-    @Resource
     private ExpressionEngine expressionEngine;
 
     @Resource
     private SpiderFlowService spiderFlowService;
 
+
+    private ExecutorFactory executorFactory;
+
+    @Autowired
+    public void setExecutorFactory(ExecutorFactory executorFactory) {
+        this.executorFactory = executorFactory;
+    }
 
     @PostMapping(value = "/list")
     public ResponseEntity<Page<SpiderFlow>> list(@RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer size, SpiderFlow flow) {
