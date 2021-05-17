@@ -17,16 +17,19 @@ public class SpiderJobManager {
 
     private Spider spider;
 
-    @Resource
     private SpiderJob spiderJob;
 
     @Resource
     private Scheduler quartzScheduler;
 
-
     @Autowired
     public void setSpider(Spider spider) {
         this.spider = spider;
+    }
+
+    @Autowired
+    public void setSpiderJob(SpiderJob spiderJob) {
+        this.spiderJob = spiderJob;
     }
 
     /**

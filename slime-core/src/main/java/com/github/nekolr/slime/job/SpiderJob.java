@@ -14,6 +14,7 @@ import com.github.nekolr.slime.util.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SpiderJob extends QuartzJobBean {
 
-    @Resource
     private Spider spider;
 
     @Resource
@@ -38,6 +38,10 @@ public class SpiderJob extends QuartzJobBean {
     @Resource
     private SpiderFlowService spiderFlowService;
 
+    @Autowired
+    public void setSpider(Spider spider) {
+        this.spider = spider;
+    }
 
     private static Map<Long, SpiderContext> contextMap = new ConcurrentHashMap<>();
 
