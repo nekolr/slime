@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Proxy</title>
+	<link rel="stylesheet" href="js/layui/css/layui.css" />
+	<link rel="stylesheet" href="css/layui-blue.css" />
+	<script type="text/javascript" src="js/layui/layui.all.js" ></script>
+</head>
+<body style="padding:5px;">
+<div class="layui-btn-container">
+	<a class="layui-btn layui-btn-sm layui-btn-normal" href="proxy-edit.html"><i class="layui-icon">&#xe654;</i> 添加代理</a>
+	<a class="layui-btn layui-btn-sm layui-btn-normal" id="auto-check-btn"><i class="layui-icon layui-icon-chart"></i> 自动检测</a>
+</div>
+<hr>
+<table class="layui-table" id="table" lay-filter="table"></table>
+<script>
+	var $ = layui.$;
+
+	$(function () {
+		$.ajax({
+			url:'proxy/cleanIsRunning',
+			success: function(running) {
+				if (running) {
+					$("#auto-check-btn").find("i")
+							.addClass("layui-icon-loading")
+							.addClass("layui-anim")
+							.addClass("layui-anim-rotate")
+							.addClass("layui-anim-loop")
+							.removeClass("layui-icon-chart");
+				}
+			}
+		})
+	})
+
+	var $table = layui.table.render({
+		id : 'table',
+		elem : '#table',
+		url : 'proxy/list',
+		page : true,
+		parseData : function(resp) {
+			return {
+				code : 0,
+				data : resp.content,
+				count : resp.totalElements
+			}
+		},
+		cols : [[{
+			title : '序号',
+			width : 60,
+			type : 'numbers',
+			align : 'center'
+		},{
+			title : '代理 IP',
+			field : 'ip'
+		},{
+			title : '端口号',
+			width : 160,
+			field : 'port',
+		},{
+			title : '代理类型',
+			width : 160,
+			field : 'type',
+			align : 'center'
+		},{
+			title : '高匿',
+			width : 160,
+			field : 'anonymous',
+			align : 'center'
+		},{
+			title : '验证时间',
+			width : 320,
+			field : 'validTime',
+			align : 'center'
+		},{
+			title : '操作',
+			width : 120,
+			align : 'center',
+			templet : '#buttons'
+		}]]
+	})
+	$("body").on('click','.btn-remove', function() {
+		var id = $(this).data('id');
+		layui.layer.confirm('您确定要删除此代理吗？', {
+			title : '删除'
+		},function(index) {
+			$table.reload();
+			$.ajax({
+				url : 'proxy/remove',
+				data : {
+					id : id
+				},
+				success : function() {
+					layui.layer.msg('删除成功', {time : 500},function() {
+						$table.reload();
+					})
+				},
+				error : function() {
+					layui.layer.msg('删除失败')
+				}
+			})
+			layui.layer.close(index);
+		})
+	}).on('click','.btn-edit',function() {
+		location.href = 'proxy-edit.html?id=' + $(this).data('id');
+	})
+
+	$("body").on("click", '#auto-check-btn', function () {
+		if ($("#auto-check-btn").find("i").hasClass("layui-icon-loading")) {
+			$.ajax({
+				url:'proxy/stopClean',
+				success: function() {
+					$("#auto-check-btn").find("i")
+							.removeClass("layui-icon-loading")
+							.removeClass("layui-anim")
+							.removeClass("layui-anim-rotate")
+							.removeClass("layui-anim-loop")
+							.addClass("layui-icon-chart");
+				}
+			})
+		} else {
+			$.ajax({
+				url:'proxy/startClean',
+				success: function() {
+					$("#auto-check-btn").find("i")
+							.addClass("layui-icon-loading")
+							.addClass("layui-anim")
+							.addClass("layui-anim-rotate")
+							.addClass("layui-anim-loop")
+							.removeClass("layui-icon-chart");
+				}
+			})
+		}
+
+	})
+</script>
+<script type="text/html" id="buttons">
+	<a class="layui-btn layui-btn-sm btn-edit" data-id="{{d.id}}">编辑</a>
+	<a class="layui-btn layui-btn-sm btn-remove" data-id="{{d.id}}">删除</a>
+</script>
+</body>
+</html>

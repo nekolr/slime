@@ -1,34 +1,43 @@
 package com.github.nekolr.slime.controller;
 
-import com.github.nekolr.slime.ExpressionEngine;
+import com.github.nekolr.slime.model.Plugin;
+import com.github.nekolr.slime.support.ExpressionEngine;
 import com.github.nekolr.slime.domain.SpiderFlow;
 import com.github.nekolr.slime.model.Shape;
 import com.github.nekolr.slime.io.Line;
 import com.github.nekolr.slime.service.SpiderFlowService;
 import com.github.nekolr.slime.support.PageRequest;
 import com.github.nekolr.slime.support.ExecutorFactory;
+import com.github.nekolr.slime.support.Pluggable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/flow")
 @Slf4j
 public class SpiderFlowController {
 
+    @Autowired(required = false)
+    @SuppressWarnings("all")
+    private List<Pluggable> pluginConfigs;
+
     @Resource
-    private SpiderFlowService spiderFlowService;
+    private ExecutorFactory executorFactory;
 
     @Resource
     private ExpressionEngine expressionEngine;
 
     @Resource
-    private ExecutorFactory executorFactory;
+    private SpiderFlowService spiderFlowService;
 
 
     @PostMapping(value = "/list")
@@ -40,6 +49,15 @@ public class SpiderFlowController {
     @RequestMapping("/objects")
     public ResponseEntity expressionObjects() {
         return ResponseEntity.ok(expressionEngine.getExpressionObjectMap());
+    }
+
+    @RequestMapping("/pluginConfigs")
+    public ResponseEntity<List<Plugin>> pluginConfigs() {
+        if (pluginConfigs == null) {
+            return ResponseEntity.ok(Collections.emptyList());
+        } else {
+            return ResponseEntity.ok(pluginConfigs.stream().filter(e -> e.plugin() != null).map(plugin -> plugin.plugin()).collect(Collectors.toList()));
+        }
     }
 
     @RequestMapping("/other")

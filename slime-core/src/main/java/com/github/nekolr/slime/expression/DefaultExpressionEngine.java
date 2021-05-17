@@ -1,6 +1,6 @@
 package com.github.nekolr.slime.expression;
 
-import com.github.nekolr.slime.ExpressionEngine;
+import com.github.nekolr.slime.support.ExpressionEngine;
 import com.github.nekolr.slime.executor.FunctionExecutor;
 import com.github.nekolr.slime.executor.FunctionExtension;
 import com.github.nekolr.slime.expression.interpreter.AbstractReflection;

@@ -29,6 +29,11 @@
             <groupId>com.github.nekolr</groupId>
             <artifactId>slime-core</artifactId>
         </dependency>
+        <!-- slime-proxy -->
+        <dependency>
+            <groupId>com.github.nekolr</groupId>
+            <artifactId>slime-proxy</artifactId>
+        </dependency>
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

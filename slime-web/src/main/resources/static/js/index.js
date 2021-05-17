@@ -25,7 +25,7 @@ function setTheSkin(value) {
 setTheSkin(getCookie('theSkin'));
 
 function openTab(title, id, href) {
-    if ($(".layui-tab[lay-filter=admin-tab]").find("[lay-id=" + id + "]").length > 0) {	//判断是否已打开
+    if ($(".layui-tab[lay-filter=admin-tab]").find("[lay-id=" + id + "]").length > 0) {	// 判断是否已打开
         var $dom = $(".layui-tab[lay-filter=admin-tab]");
         var index = $dom.find("[lay-id=" + id + "]").index();
         $dom.find(".layui-tab-content .layui-tab-item").eq(index).find("iframe").attr("src", href);
@@ -41,8 +41,16 @@ function openTab(title, id, href) {
 }
 
 $(function () {
-    layui.element.init();
-    initMenu();
+    $.ajax({
+        url:'flow/pluginConfigs',
+        success: function(data) {
+            for(var i =0;i<data.length;i++){
+                $(".menu-list .layui-nav-tree").append('<li class="layui-nav-item layui-nav-itemed"><a data-link="'+data[i].url+'" title="'+data[i].name+'">'+data[i].name+'</a></li>');
+            }
+            layui.element.init();
+            initMenu();
+        }
+    })
 })
 
 function initMenu() {

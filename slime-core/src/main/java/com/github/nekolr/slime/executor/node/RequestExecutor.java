@@ -1,6 +1,6 @@
 package com.github.nekolr.slime.executor.node;
 
-import com.github.nekolr.slime.Grammarly;
+import com.github.nekolr.slime.support.Grammarly;
 import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.context.SpiderContext;
 import com.github.nekolr.slime.model.Grammar;
@@ -431,8 +431,8 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      * @param node    节点
      */
     private void setupTimeout(HttpRequest request, SpiderNode node) {
-        // 默认 30s
-        int timeout = NumberUtils.toInt(node.getJsonProperty(REQUEST_TIMEOUT), 30000);
+        // 默认 20s
+        int timeout = NumberUtils.toInt(node.getJsonProperty(REQUEST_TIMEOUT), 20000);
         log.debug("设置请求超时时间：{} ms", timeout);
         request.timeout(timeout);
     }

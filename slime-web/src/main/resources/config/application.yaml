@@ -57,3 +57,11 @@ spider:
   job:
     # 是否开启
     enabled: true
+  # 代理
+  proxy:
+    # 检测代理是否有效时使用的地址
+    check-url: https://www.baidu.com
+    # 检测代理是否有效的超时时间，单位毫秒
+    check-timeout: 3000
+    # 检测时间间隔（可以携带单位）
+    check-interval: 30s

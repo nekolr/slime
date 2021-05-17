@@ -23,6 +23,7 @@
         <module>slime-api</module>
         <module>slime-core</module>
         <module>slime-web</module>
+        <module>slime-proxy</module>
     </modules>
 
     <licenses>
@@ -85,6 +86,11 @@
             <dependency>
                 <groupId>com.github.nekolr</groupId>
                 <artifactId>slime-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-proxy</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- jsoup -->

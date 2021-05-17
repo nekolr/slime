@@ -1,6 +1,6 @@
 package com.github.nekolr.slime.executor.node;
 
-import com.github.nekolr.slime.Grammarly;
+import com.github.nekolr.slime.support.Grammarly;
 import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.context.SpiderContext;
 import com.github.nekolr.slime.model.Grammar;

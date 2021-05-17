@@ -1,4 +1,4 @@
-package com.github.nekolr.slime;
+package com.github.nekolr.slime.support;
 
 import java.util.Map;
 

@@ -1,6 +1,5 @@
 package com.github.nekolr.slime.support;
 
-import com.github.nekolr.slime.ExpressionEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
