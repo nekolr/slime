@@ -5,6 +5,7 @@ import com.github.nekolr.slime.domain.SpiderFlow;
 import com.github.nekolr.slime.constant.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -14,7 +15,6 @@ import java.util.Date;
 @Slf4j
 public class SpiderJobManager {
 
-    @Resource
     private Spider spider;
 
     @Resource
@@ -22,6 +22,12 @@ public class SpiderJobManager {
 
     @Resource
     private Scheduler quartzScheduler;
+
+
+    @Autowired
+    public void setSpider(Spider spider) {
+        this.spider = spider;
+    }
 
     /**
      * 创建定时任务

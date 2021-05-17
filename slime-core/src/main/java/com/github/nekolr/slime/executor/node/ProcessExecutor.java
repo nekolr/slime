@@ -9,6 +9,7 @@ import com.github.nekolr.slime.util.SpiderFlowUtils;
 import lombok.extern.slf4j.Slf4j;
 import com.github.nekolr.slime.context.SpiderContext;
 import com.github.nekolr.slime.executor.NodeExecutor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,8 +22,12 @@ import java.util.Map;
 @Slf4j
 public class ProcessExecutor implements NodeExecutor {
 
-    @Resource
     private Spider spider;
+
+    @Autowired
+    public void setSpider(Spider spider) {
+        this.spider = spider;
+    }
 
     @Resource
     private SpiderFlowService spiderFlowService;

@@ -57,7 +57,6 @@ public class Spider {
     /**
      * 执行器工厂
      */
-    @Resource
     private ExecutorFactory executorFactory;
 
     /**
@@ -71,6 +70,12 @@ public class Spider {
      */
     @Getter
     private SpiderThreadPoolExecutor threadPool;
+
+
+    @Autowired
+    public void setExecutorFactory(ExecutorFactory executorFactory) {
+        this.executorFactory = executorFactory;
+    }
 
 
     @PostConstruct
