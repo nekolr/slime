@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 数据源实体类
+ * 代理实体类
  */
 @Table(name = "slime_sp_proxy")
 @Entity

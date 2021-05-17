@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
+import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +19,15 @@ import java.util.List;
 @Slf4j
 public class UserAgentManager {
 
-    private static final String USERAGENT_FILE_PATH = "classpath:fake_useragent.json";
+    private static final String USERAGENT_FILE_PATH = "fake_useragent.json";
 
     private static List<BrowserUserAgent> user_agents;
 
     @PostConstruct
     private void initialize() {
-        FileInputStream input = null;
+        InputStream input = null;
         try {
-            input = new FileInputStream(ResourceUtils.getFile(USERAGENT_FILE_PATH));
+            input = ClassUtils.getDefaultClassLoader().getResourceAsStream(USERAGENT_FILE_PATH);
             String json = IOUtils.toString(input, StandardCharsets.UTF_8);
             user_agents = JSON.parseArray(json, BrowserUserAgent.class);
         } catch (IOException e) {
