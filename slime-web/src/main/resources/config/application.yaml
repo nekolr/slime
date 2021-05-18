@@ -16,6 +16,9 @@ logging:
 spring:
   application:
     name: slime
+  profiles:
+    # 引入其他配置文件
+    include: user
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss

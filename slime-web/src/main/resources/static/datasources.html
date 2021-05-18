@@ -13,6 +13,9 @@
 <table class="layui-table" id="table" lay-filter="table"></table>
 <script>
 	var $ = layui.$;
+</script>
+<script type="text/javascript" src="js/setup.js" ></script>
+<script>
 	var $table = layui.table.render({
 		id : 'table',
 		elem : '#table',
@@ -56,6 +59,7 @@
 			$table.reload();
 			$.ajax({
 				url : 'datasource/remove',
+				type: 'post',
 				data : {
 					id : id
 				},

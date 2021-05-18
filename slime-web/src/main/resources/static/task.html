@@ -12,11 +12,14 @@
 <table class="layui-table" id="table" lay-filter="table"></table>
 <script>
 	var $ = layui.$;
+</script>
+<script type="text/javascript" src="js/setup.js" ></script>
+<script>
 	var $table = layui.table.render({
 		id : 'table',
 		elem : '#table',
 		url : 'task/list?flowId=' + getQueryString('id'),
-		method : 'post',
+		method : 'get',
 		page : true,
 		parseData : function(resp){
 			return {
@@ -53,6 +56,7 @@
 			$table.reload();
 			$.ajax({
 				url : 'task/remove',
+				type: 'post',
 				data : {
 					id : id
 				},

@@ -42,6 +42,7 @@
 - 支持同步执行，对于执行结果有顺序要求的可以使用该功能
 - 增加随机 User-Agent（数据来自：[useragentstring.com](http://useragentstring.com/pages/useragentstring.php) ）
 - 增加代理的管理界面，方便进行代理的手工添加（不推荐）和启动代理的自动管理功能（定时检测代理的有效性，无效的代理会被自动删除）
+- 增加身份认证机制，默认账号和密码都是 slime，可以通过环境变量 `SLIME_USERNAME` 和 `SLIME_PASSWORD` 修改
 
 ## 感谢
 [spider-flow](https://github.com/ssssssss-team/spider-flow) - 新一代爬虫平台，以图形化方式定义爬虫流程，不写代码即可完成爬虫。

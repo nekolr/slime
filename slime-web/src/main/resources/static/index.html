@@ -6,8 +6,12 @@
 		<link rel="stylesheet" href="js/layui/css/layui.css" />
 		<link rel="stylesheet" id="theSkin" />
 		<link rel="stylesheet" href="css/index.css" />
-		<link rel="alternate icon" type="image/png" href="favicon.png">
+		<link rel="alternate icon" type="image/png" href="images/favicon.png">
 		<script type="text/javascript" src="js/layui/layui.all.js" ></script>
+		<script>
+			var $ = layui.$;
+		</script>
+		<script type="text/javascript" src="js/setup.js" ></script>
 		<script type="text/javascript" src="js/index.js" ></script>
 		<script>SLIME_VERSION = "0.0.1"</script>
 	</head>
@@ -43,6 +47,11 @@
 		</div>
 	</body>
 	<script>
-		$(".layui-logo").append('<span><img src="favicon.png" width="50px">Slime ' + SLIME_VERSION + '</span>');
+
+		if (!localStorage.getItem("slime_token")) {
+			window.location.href = "/login.html"
+		}
+
+		$(".layui-logo").append('<span><img src="images/favicon.png" width="50px">Slime ' + SLIME_VERSION + '</span>');
 	</script>
 </html>

@@ -11,6 +11,9 @@ RUN mvn clean package
 
 FROM openjdk:8-jdk-alpine
 
+ENV SLIME_USERNAME slime
+ENV SLIME_PASSWORD slime
+
 COPY --from=build /usr/src/app/slime-web/target/slime.jar .
 
 EXPOSE 8086

@@ -3,7 +3,6 @@ package com.github.nekolr.slime.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -40,7 +39,6 @@ public class ProxyDTO {
     /**
      * 是否高匿
      */
-    @ColumnDefault("false")
     private Boolean anonymous;
 
     /**

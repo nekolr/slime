@@ -1,0 +1,10 @@
+spider:
+  # 用户名，默认为 slime
+  username: ${SLIME_USERNAME:slime}
+  # 密码，默认为 slime
+  password: ${SLIME_PASSWORD:slime}
+
+# jwt
+jwt:
+  # jwt 过期时间
+  period: 1800s

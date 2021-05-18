@@ -44,18 +44,18 @@ public class SpiderFlowController {
         this.executorFactory = executorFactory;
     }
 
-    @PostMapping(value = "/list")
+    @GetMapping(value = "/list")
     public ResponseEntity<Page<SpiderFlow>> list(@RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer size, SpiderFlow flow) {
         PageRequest request = new PageRequest(page, size);
         return ResponseEntity.ok(spiderFlowService.findAll(flow, request.toPageable()));
     }
 
-    @RequestMapping("/objects")
+    @GetMapping("/objects")
     public ResponseEntity expressionObjects() {
         return ResponseEntity.ok(expressionEngine.getExpressionObjectMap());
     }
 
-    @RequestMapping("/pluginConfigs")
+    @GetMapping("/pluginConfigs")
     public ResponseEntity<List<Plugin>> pluginConfigs() {
         if (pluginConfigs == null) {
             return ResponseEntity.ok(Collections.emptyList());
@@ -64,7 +64,7 @@ public class SpiderFlowController {
         }
     }
 
-    @RequestMapping("/other")
+    @GetMapping("/other")
     public ResponseEntity<List<SpiderFlow>> otherFlows(Long id) {
         if (Objects.isNull(id)) {
             return ResponseEntity.ok(spiderFlowService.findAll());
@@ -72,29 +72,29 @@ public class SpiderFlowController {
         return ResponseEntity.ok(spiderFlowService.findOtherFlows(id));
     }
 
-    @RequestMapping("/cron")
+    @PostMapping("/cron")
     public ResponseEntity updateCron(Long id, String cron) {
         spiderFlowService.updateCronAndNextExecuteTime(id, cron);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public ResponseEntity<Long> save(SpiderFlow flow) {
         spiderFlowService.save(flow);
         return ResponseEntity.ok((flow.getId()));
     }
 
-    @RequestMapping("/xml")
+    @GetMapping("/xml")
     public ResponseEntity<String> getXml(Long id) {
         return ResponseEntity.ok(spiderFlowService.getById(id).getXml());
     }
 
-    @RequestMapping("/log")
+    @GetMapping("/log")
     public ResponseEntity<List<Line>> log(Long id, Long taskId, String keywords, Long index, Integer count, Boolean reversed, Boolean matchCase, Boolean regex) {
         return ResponseEntity.ok(spiderFlowService.log(id, taskId, keywords, index, count, reversed, matchCase, regex));
     }
 
-    @RequestMapping("/remove")
+    @PostMapping("/remove")
     public ResponseEntity remove(Long id) {
         spiderFlowService.removeById(id);
         return ResponseEntity.ok().build();
@@ -105,24 +105,24 @@ public class SpiderFlowController {
         return ResponseEntity.ok(spiderFlowService.getRecentTriggerTime(cron, 5));
     }
 
-    @RequestMapping("/shapes")
+    @GetMapping("/shapes")
     public ResponseEntity<List<Shape>> shapes() {
         return ResponseEntity.ok(executorFactory.shapes());
     }
 
-    @RequestMapping("/start")
+    @PostMapping("/start")
     public ResponseEntity start(Long id) {
         spiderFlowService.start(id);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping("/run")
+    @PostMapping("/run")
     public ResponseEntity run(Long id) {
         spiderFlowService.run(id);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping("/stop")
+    @PostMapping("/stop")
     public ResponseEntity stop(Long id) {
         spiderFlowService.stop(id);
         return ResponseEntity.ok().build();
