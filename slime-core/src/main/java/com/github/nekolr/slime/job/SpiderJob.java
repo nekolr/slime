@@ -75,7 +75,7 @@ public class SpiderJob extends QuartzJobBean {
         // 创建一个流程任务
         SpiderTask task = createSpiderTask(flow.getId());
         // 创建执行上下文
-        SpiderContext context = SpiderJobContext.create(spiderConfig.getWorkspace(), flow.getId(), task.getId(), false);
+        SpiderJobContext context = SpiderJobContext.create(spiderConfig.getWorkspace(), flow.getId(), task.getId(), false);
         try {
             log.info("流程：{} 开始执行，任务 ID 为：{}", flow.getName(), task.getId());
             SpiderContextHolder.set(context);
@@ -85,6 +85,10 @@ public class SpiderJob extends QuartzJobBean {
         } catch (Throwable t) {
             log.error("流程：{} 执行出错，任务 ID 为：{}", flow.getName(), task.getId());
         } finally {
+            // 关闭流
+            if (context != null) {
+                context.close();
+            }
             contextMap.remove(task.getId());
             SpiderContextHolder.remove();
             // 更新任务结束时间
