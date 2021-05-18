@@ -313,7 +313,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
                 try {
                     printer.flush();
                     printer.close();
-                    this.cachePrinter.remove(entry.getKey());
+                    iterator.remove();
                 } catch (IOException e) {
                     log.error("文件输出出现错误", e);
                     ExceptionUtils.wrapAndThrow(e);
