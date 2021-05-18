@@ -4,8 +4,10 @@ import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.model.SpiderOutput;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class SpiderJobContext extends SpiderContext {
 
     public void close() {
         try {
-            this.outputStream.close();
+            IOUtils.close(this.outputStream);
         } catch (Exception e) {
 
         }
@@ -57,22 +59,19 @@ public class SpiderJobContext extends SpiderContext {
      * @param taskId      任务 ID
      * @param allowOutput 是否允许输出结果
      * @return 执行上下文
+     * @throws FileNotFoundException 文件不存在
      */
-    public static SpiderJobContext create(String workspace, Long flowId, Long taskId, boolean allowOutput) {
+    public static SpiderJobContext create(String workspace, Long flowId, Long taskId,
+                                          boolean allowOutput) throws FileNotFoundException {
         String flowFolder = Constants.SPIDER_FLOW_LOG_DIR_PREFIX + flowId;
         String taskFolder = Constants.SPIDER_TASK_LOG_DIR_PREFIX + taskId;
-        OutputStream os = null;
-        try {
-            File file = new File(new File(workspace),
-                    "logs" + File.separator + flowFolder + File.separator + "logs" + File.separator + taskFolder + ".log");
-            File dirFile = file.getParentFile();
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-            os = new FileOutputStream(file, true);
-        } catch (Exception e) {
-            log.error("创建日志文件出错", e);
+        File file = new File(new File(workspace),
+                "logs" + File.separator + flowFolder + File.separator + "logs" + File.separator + taskFolder + ".log");
+        File dirFile = file.getParentFile();
+        if (!dirFile.exists()) {
+            dirFile.mkdirs();
         }
+        OutputStream os = new FileOutputStream(file, true);
         SpiderJobContext context = new SpiderJobContext(os, allowOutput);
         context.setFlowId(flowId);
         return context;

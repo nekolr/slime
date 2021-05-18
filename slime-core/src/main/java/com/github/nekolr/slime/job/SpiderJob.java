@@ -19,6 +19,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -75,13 +76,16 @@ public class SpiderJob extends QuartzJobBean {
         // 创建一个流程任务
         SpiderTask task = createSpiderTask(flow.getId());
         // 创建执行上下文
-        SpiderJobContext context = SpiderJobContext.create(spiderConfig.getWorkspace(), flow.getId(), task.getId(), false);
+        SpiderJobContext context = null;
         try {
+            context = SpiderJobContext.create(spiderConfig.getWorkspace(), flow.getId(), task.getId(), false);
             log.info("流程：{} 开始执行，任务 ID 为：{}", flow.getName(), task.getId());
             SpiderContextHolder.set(context);
             contextMap.put(task.getId(), context);
             spider.run(flow, context);
             log.info("流程：{} 执行完毕，任务 ID 为：{}，下次执行时间：{}", flow.getName(), task.getId(), TimeUtils.format(nextTime));
+        } catch (FileNotFoundException e) {
+            log.error("创建日志文件失败", e);
         } catch (Throwable t) {
             log.error("流程：{} 执行出错，任务 ID 为：{}", flow.getName(), task.getId());
         } finally {
