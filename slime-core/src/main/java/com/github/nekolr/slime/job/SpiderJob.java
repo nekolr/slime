@@ -79,8 +79,8 @@ public class SpiderJob extends QuartzJobBean {
         SpiderJobContext context = null;
         try {
             context = SpiderJobContext.create(spiderConfig.getWorkspace(), flow.getId(), task.getId(), false);
-            log.info("流程：{} 开始执行，任务 ID 为：{}", flow.getName(), task.getId());
             SpiderContextHolder.set(context);
+            log.info("流程：{} 开始执行，任务 ID 为：{}", flow.getName(), task.getId());
             contextMap.put(task.getId(), context);
             spider.run(flow, context);
             log.info("流程：{} 执行完毕，任务 ID 为：{}，下次执行时间：{}", flow.getName(), task.getId(), TimeUtils.format(nextTime));
