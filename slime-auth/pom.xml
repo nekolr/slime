@@ -14,10 +14,10 @@
     <url>https://github.com/nekolr/slime/tree/master/slime-auth</url>
 
     <dependencies>
-        <!-- slime-api -->
+        <!-- commons -->
         <dependency>
-            <groupId>com.github.nekolr</groupId>
-            <artifactId>slime-api</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <!-- lombok -->
         <dependency>

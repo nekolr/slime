@@ -1,6 +1,5 @@
 package com.github.nekolr.slime.security.filter;
 
-import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.entity.User;
 import com.github.nekolr.slime.security.JwtUser;
 import com.github.nekolr.slime.service.UserService;
@@ -29,20 +28,31 @@ import java.util.Objects;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    /**
+     * Token 在请求头中的 key
+     */
+    String TOKEN_HEADER_KEY = "Authorization";
+
+    /**
+     * Token 在请求头中的值的前缀
+     */
+    String TOKEN_HEADER_VALUE_PREFIX = "Bearer ";
+
+
     @Resource
     private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        String header = request.getHeader(Constants.TOKEN_HEADER_KEY);
+        String header = request.getHeader(TOKEN_HEADER_KEY);
 
-        if (StringUtils.isBlank(header) || !header.startsWith(Constants.TOKEN_HEADER_VALUE_PREFIX)) {
+        if (StringUtils.isBlank(header) || !header.startsWith(TOKEN_HEADER_VALUE_PREFIX)) {
             chain.doFilter(request, response);
             return;
         }
 
-        String jwt = StringUtils.replace(header, Constants.TOKEN_HEADER_VALUE_PREFIX, "");
+        String jwt = StringUtils.replace(header, TOKEN_HEADER_VALUE_PREFIX, "");
         try {
             // 只判断 token 合法有效，真正的用户信息通过查询得到
             JwtUser jwtUser = JwtUtils.parseJwt(jwt);
