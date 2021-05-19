@@ -79,7 +79,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
     private SpiderConfig spiderConfig;
 
     /**
-     * 一个节点对应一个 CSVPrinter
+     * 一个执行上下文对应一个 CSVPrinter
      */
     private Map<String, CSVPrinter> cachePrinter = new HashMap<>();
 
@@ -239,7 +239,7 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
         if (outputItems == null || outputItems.isEmpty()) {
             return;
         }
-        String key = context.getId() + "-" + node.getNodeId();
+        String key = context.getId();
         CSVPrinter printer = cachePrinter.get(key);
 
         // 所有的记录值
@@ -295,8 +295,9 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
 
     @Override
     public void afterEnd(SpiderContext context) {
-        // 执行完毕后释放缓存
-        this.releasePrinters();
+        String key = context.getId();
+        // 执行完毕后释放缓存，只释放自己的缓存
+        this.releasePrinter(key);
     }
 
 
@@ -305,19 +306,17 @@ public class OutputExecutor implements NodeExecutor, SpiderListener {
         return "output";
     }
 
-    private void releasePrinters() {
-        for (Iterator<Map.Entry<String, CSVPrinter>> iterator = this.cachePrinter.entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<String, CSVPrinter> entry = iterator.next();
-            CSVPrinter printer = entry.getValue();
-            if (printer != null) {
-                try {
-                    printer.flush();
-                    printer.close();
-                    iterator.remove();
-                } catch (IOException e) {
-                    log.error("文件输出出现错误", e);
-                    ExceptionUtils.wrapAndThrow(e);
-                }
+    private void releasePrinter(String key) {
+        log.debug("release printer：key = {}", key);
+        CSVPrinter printer = this.cachePrinter.get(key);
+        if (printer != null) {
+            try {
+                printer.flush();
+                printer.close();
+                this.cachePrinter.remove(key);
+            } catch (IOException e) {
+                log.error("文件输出出现错误", e);
+                ExceptionUtils.wrapAndThrow(e);
             }
         }
     }
