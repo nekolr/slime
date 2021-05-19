@@ -30,9 +30,11 @@ public class SpiderFlowFileAppender extends RollingFileAppender<ILoggingEvent> {
             // 将日志的文件流设置为执行上下文中的流
             SpiderContext context = SpiderContextHolder.get();
             OutputStream out = this.getOutputStream();
-            if (context instanceof SpiderJobContext) {
-                SpiderJobContext jobContext = (SpiderJobContext) context;
-                out = jobContext.getOutputStream();
+            if (context != null) {
+                if (context instanceof SpiderJobContext) {
+                    SpiderJobContext jobContext = (SpiderJobContext) context;
+                    out = jobContext.getOutputStream();
+                }
             }
             try {
                 if (event instanceof DeferredProcessingAware) {

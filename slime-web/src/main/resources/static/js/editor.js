@@ -191,7 +191,7 @@ function monacoLayout() {
 $(function () {
     $.ajax({
         url: 'flow/objects',
-        type: 'post',
+        type: 'get',
         dataType: 'json',
         success: function (data) {
             spiderflowGrammar.reset(data)
@@ -199,7 +199,7 @@ $(function () {
     })
     $.ajax({
         url: 'flow/other',
-        type: 'post',
+        type: 'get',
         data: {
             id: getQueryString('id')
         },
@@ -661,7 +661,7 @@ $(function () {
         }
         $.ajax({
         	url : 'flow/shapes',
-        	type : 'post',
+        	type : 'get',
         	dataType : 'json',
         	async :false,
         	success : function(shapeExts){

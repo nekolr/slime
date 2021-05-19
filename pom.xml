@@ -24,6 +24,7 @@
         <module>slime-core</module>
         <module>slime-web</module>
         <module>slime-proxy</module>
+        <module>slime-auth</module>
     </modules>
 
     <licenses>
@@ -44,6 +45,7 @@
         <guava.version>30.1.1-jre</guava.version>
         <jsoup.version>1.13.1</jsoup.version>
         <xsoup.version>0.3.2</xsoup.version>
+        <jjwt.version>0.11.2</jjwt.version>
         <!-- 项目版本号 -->
         <revision>0.0.1</revision>
     </properties>
@@ -93,6 +95,11 @@
                 <artifactId>slime-proxy</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- jsoup -->
             <dependency>
                 <groupId>org.jsoup</groupId>
@@ -127,6 +134,22 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <!-- jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

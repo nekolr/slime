@@ -73,8 +73,11 @@
 			<button class="layui-btn layui-btn-primary btn-return" type="button" onclick="history.go(-1);">返回</button>
 		</div>
 	</form>
-	<script type="text/javascript">
+	<script>
 		var $ = layui.$;
+	</script>
+	<script type="text/javascript" src="js/setup.js" ></script>
+	<script type="text/javascript">
 		layui.use('form', function(){
 			var form = layui.form;
 			form.render();
@@ -148,9 +151,9 @@
 			return false;
 		})
 		layui.form.on('submit(test)', function () {
-			sf.ajax({
+			$.ajax({
 				url : 'datasource/test',
-				type : 'post',
+				type : 'get',
 				data : {
 					driverClassName : resetSelect().val(),
 					jdbcUrl : $("input[name=jdbcUrl]").val(),

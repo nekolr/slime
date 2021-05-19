@@ -61,6 +61,10 @@
 			<button class="layui-btn layui-btn-primary btn-return" type="button" onclick="history.go(-1);">返回</button>
 		</div>
 	</form>
+	<script>
+		var $ = layui.$;
+	</script>
+	<script type="text/javascript" src="js/setup.js" ></script>
 	<script type="text/javascript">
 		var editor = CodeMirror.fromTextArea(document.getElementById("script"), {
 			lineNumbers: true,
@@ -68,7 +72,6 @@
 			continueComments: "Enter"
 		});
 		editor.setOption('theme','dracula')
-		var $ = layui.$;
 		var fId = getQueryString('id');
 		if(fId){
 			$.ajax({

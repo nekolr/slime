@@ -486,8 +486,9 @@ li {
 	<script type="text/javascript" src="js/cron/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="js/cron/cron.js"></script>
 	<script type="text/javascript" src="js/layui/layui.all.js"></script>
+	<script type="text/javascript" src="js/setup.js" ></script>
 	<script>
-	 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	 var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	    var parentCron = getURLParameter("cron");
 	    var id = getURLParameter("id");
 	    window.onload = function () {
@@ -511,6 +512,7 @@ li {
 			   if (value) {
 				   $.ajax({
 			            url : '/flow/cron',
+					   	type: "post",
 			            data : {
 			                id : id,
 			                cron : value

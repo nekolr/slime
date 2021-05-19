@@ -16,10 +16,13 @@
 <table class="layui-table" id="table" lay-filter="table"></table>
 <script>
 	var $ = layui.$;
-
+</script>
+<script type="text/javascript" src="js/setup.js" ></script>
+<script>
 	$(function () {
 		$.ajax({
 			url:'proxy/cleanIsRunning',
+			type: 'get',
 			success: function(running) {
 				if (running) {
 					$("#auto-check-btn").find("i")
@@ -87,6 +90,7 @@
 			$table.reload();
 			$.ajax({
 				url : 'proxy/remove',
+				type: 'post',
 				data : {
 					id : id
 				},
@@ -109,6 +113,7 @@
 		if ($("#auto-check-btn").find("i").hasClass("layui-icon-loading")) {
 			$.ajax({
 				url:'proxy/stopClean',
+				type: 'post',
 				success: function() {
 					$("#auto-check-btn").find("i")
 							.removeClass("layui-icon-loading")
@@ -121,6 +126,7 @@
 		} else {
 			$.ajax({
 				url:'proxy/startClean',
+				type: 'post',
 				success: function() {
 					$("#auto-check-btn").find("i")
 							.addClass("layui-icon-loading")

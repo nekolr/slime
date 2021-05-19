@@ -44,6 +44,7 @@ public class Proxy {
     /**
      * 是否高匿
      */
+    @ColumnDefault("false")
     private Boolean anonymous;
 
     /**

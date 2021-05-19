@@ -25,11 +25,13 @@
 <table class="layui-table" id="table" lay-filter="table"></table>
 <script>
     var $ = layui.$;
+</script>
+<script type="text/javascript" src="js/setup.js" ></script>
+<script>
     var $table = layui.table.render({
         id: 'table',
         elem: '#table',
         url: 'flow/list',
-        method: 'post',
         page: true,
         parseData: function (resp) {
             return {
@@ -101,6 +103,7 @@
         }
         $.ajax({
             url: 'flow/' + (e.elem.checked ? 'start' : 'stop'),
+            type: "post",
             data: {
                 id: e.value
             },
@@ -136,6 +139,7 @@
             $table.reload();
             $.ajax({
                 url: 'flow/remove',
+                type: 'post',
                 data: {
                     id: id
                 },
@@ -158,6 +162,7 @@
             $table.reload();
             $.ajax({
                 url: 'flow/run',
+                type: 'post',
                 data: {
                     id: id
                 },

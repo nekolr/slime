@@ -61,9 +61,11 @@
 			<button class="layui-btn layui-btn-primary btn-return" type="button" onclick="history.go(-1);">返回</button>
 		</div>
 	</form>
-	<script type="text/javascript">
-
+	<script>
 		var $ = layui.$;
+	</script>
+	<script type="text/javascript" src="js/setup.js" ></script>
+	<script type="text/javascript">
 		layui.use('form', function(){
 			var form = layui.form;
 			form.render();
@@ -100,6 +102,7 @@
 		if(dsId){
 			$.ajax({
 				url : 'proxy/get',
+				type: 'get',
 				data : {
 					id : dsId
 				},
@@ -121,12 +124,16 @@
 					type : resetSelect().val(),
 					anonymous : $("input[name=anonymous]").val()
 				},
-				success : function() {
-					layui.layer.msg('保存成功', {
-						time : 800
-					},function(){
-						location.href = 'proxy.html';
-					})
+				success : function(success) {
+					if (success) {
+						layui.layer.msg('保存成功', {
+							time : 800
+						},function(){
+							location.href = 'proxy.html';
+						})
+					} else {
+						layui.layer.msg('保存失败');
+					}
 				},
 				error : function(){
 					layui.layer.msg('请求失败');
@@ -136,9 +143,9 @@
 		})
 
 		layui.form.on('submit(test)', function () {
-			sf.ajax({
+			$.ajax({
 				url : 'proxy/test',
-				type : 'post',
+				type : 'get',
 				data : {
 					ip : $("input[name=ip]").val(),
 					port : $("input[name=port]").val(),

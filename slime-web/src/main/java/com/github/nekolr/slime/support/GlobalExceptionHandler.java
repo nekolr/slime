@@ -1,11 +1,13 @@
 package com.github.nekolr.slime.support;
 
+import com.github.nekolr.slime.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -25,6 +27,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("出现未知异常", e);
         ErrorResponse errorResponse = new ErrorResponse(INTERNAL_SERVER_ERROR.value(), ExceptionUtils.getStackTrace(e));
+        return this.buildResponseEntity(errorResponse);
+    }
+
+    /**
+     * 处理无效的请求方法异常
+     */
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(INTERNAL_SERVER_ERROR.value(), "无效的请求方法");
+        return this.buildResponseEntity(errorResponse);
+    }
+
+    /**
+     * 处理所有无效请求异常
+     */
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getStatus(), e.getMessage());
         return this.buildResponseEntity(errorResponse);
     }
 

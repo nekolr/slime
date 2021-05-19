@@ -145,4 +145,19 @@ public interface Constants {
      * 流程任务对应的日志目录前缀
      */
     String SPIDER_TASK_LOG_DIR_PREFIX = "slime_spider_task_";
+
+
+    //*************************************************************************************
+    //                                       JWT
+    //*************************************************************************************
+
+    /**
+     * Token 在请求头中的 key
+     */
+    String TOKEN_HEADER_KEY = "Authorization";
+
+    /**
+     * Token 在请求头中的值的前缀
+     */
+    String TOKEN_HEADER_VALUE_PREFIX = "Bearer ";
 }

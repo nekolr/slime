@@ -144,7 +144,7 @@ LogViewer.prototype.loadLines = function(count,callback,async){
     $.ajax({
         url : this.url,
         async : async,
-        type : 'post',
+        type : 'get',
         data : {
             reversed : this.reversed,
             count : this.bufferSize,
@@ -152,7 +152,7 @@ LogViewer.prototype.loadLines = function(count,callback,async){
             taskId: this.taskId,
             index : _this.index,
             keywords : this.keywords,
-            matchcase : this.matchcase,
+            matchCase : this.matchcase,
             regx : this.regx
         },
         dataType : 'json',
