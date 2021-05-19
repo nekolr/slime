@@ -13,6 +13,7 @@ FROM openjdk:8-jdk-alpine
 
 ENV SLIME_USERNAME slime
 ENV SLIME_PASSWORD slime
+ENV TZ Asia/Shanghai
 
 COPY --from=build /usr/src/app/slime-web/target/slime.jar .
 
