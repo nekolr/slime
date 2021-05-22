@@ -24,6 +24,7 @@ public class WebSocketEvent<T> {
     public static final String COMMON_EVENT = "common";
     public static final String REQUEST_PARAM_EVENT = "request-param";
     public static final String REQUEST_HEADER_EVENT = "request-header";
+    public static final String REQUEST_BODY_EVENT = "request-body";
     public static final String REQUEST_AUTO_COOKIE_EVENT = "request-cookie-auto";
     public static final String REQUEST_COOKIE_EVENT = "request-cookie";
 

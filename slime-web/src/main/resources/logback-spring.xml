@@ -32,8 +32,10 @@
     <!-- WebSocket 输出日志 -->
     <appender name="WEBSOCKET" class="com.github.nekolr.slime.logback.SpiderFlowWebSocketAppender"/>
 
-    <!-- 日志输出级别 -->
-    <root level="${LOG_LEVEL}">
+    <!-- slime 日志输出级别 -->
+    <logger name="com.github.nekolr.slime" level="${LOG_LEVEL}"/>
+
+    <root level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="WEBSOCKET"/>

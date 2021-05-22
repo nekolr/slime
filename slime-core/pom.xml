@@ -19,6 +19,11 @@
             <groupId>com.github.nekolr</groupId>
             <artifactId>slime-api</artifactId>
         </dependency>
+        <!-- commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+        </dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -5,20 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.nekolr.slime.Spider;
 import com.github.nekolr.slime.context.SpiderWebSocketContext;
 import com.github.nekolr.slime.util.SpiderFlowUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.web.socket.*;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * 编辑器 WebSocket 通讯服务
- */
-@ServerEndpoint("/ws")
-@Component
-public class WebSocketEditorServer {
+public class WebSocketEditorHandler extends TextWebSocketHandler {
 
     /**
      * 需要特殊的注入方式
@@ -30,10 +22,10 @@ public class WebSocketEditorServer {
      */
     private SpiderWebSocketContext context;
 
-    @OnMessage
-    public void onMessage(String message, Session session) {
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         // 将客户端发送的消息转换成 json 格式
-        JSONObject event = JSON.parseObject(message);
+        JSONObject event = JSON.parseObject(message.getPayload());
         // 获取事件类型
         String eventType = event.getString("eventType");
         // 是 debug 类型的事件吗
@@ -70,9 +62,4 @@ public class WebSocketEditorServer {
         }
     }
 
-    @OnClose
-    public void onClose(Session session) {
-        context.setRunning(false);
-        context.stop();
-    }
 }

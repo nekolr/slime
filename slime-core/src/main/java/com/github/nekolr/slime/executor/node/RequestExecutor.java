@@ -1,5 +1,6 @@
 package com.github.nekolr.slime.executor.node;
 
+import com.github.nekolr.slime.constant.RequestBodyType;
 import com.github.nekolr.slime.support.Grammarly;
 import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.context.SpiderContext;
@@ -13,6 +14,7 @@ import com.github.nekolr.slime.io.HttpResponse;
 import com.github.nekolr.slime.io.SpiderResponse;
 import com.github.nekolr.slime.support.ExpressionParser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -20,7 +22,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +67,41 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
      * 请求的查询参数值
      */
     private static final String REQUEST_QUERY_PARAM_VALUE = "query-param-value";
+
+    /**
+     * 请求的表单参数名称
+     */
+    private static final String FORM_PARAM_NAME = "form-param-name";
+
+    /**
+     * 请求的表单参数值
+     */
+    private static final String FORM_PARAM_VALUE = "form-param-value";
+
+    /**
+     * 请求的表单参数类型
+     */
+    private static final String FORM_PARAM_TYPE = "form-param-type";
+
+    /**
+     * 请求的表单中文件的名称
+     */
+    private static final String FORM_PARAM_FILENAME = "form-param-filename";
+
+    /**
+     * 请求体的类型
+     */
+    private static final String BODY_TYPE = "body-type";
+
+    /**
+     * 请求体的正文类型（MIME Type）
+     */
+    private static final String BODY_CONTENT_TYPE = "body-content-type";
+
+    /**
+     * 请求体
+     */
+    private static final String REQUEST_BODY = "request-body";
 
     /**
      * 请求的 Cookie 名称
@@ -135,6 +175,8 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
     }
 
     private void doExecute(SpiderNode node, SpiderContext context, Map<String, Object> variables) {
+        // 请求体类型
+        RequestBodyType bodyType = RequestBodyType.geRequestBodyType(node.getJsonProperty(BODY_TYPE, "none"));
         // 重试次数
         int retryCount = NumberUtils.toInt(node.getJsonProperty(REQUEST_RETRY_COUNT), 0);
         // 重试间隔，单位毫秒
@@ -157,8 +199,22 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
             this.setupHeaders(request, node, context, variables);
             // 设置 Cookies
             this.setupCookies(request, node, context, variables);
-            // 设置请求参数
-            this.setupQueryParams(request, node, context, variables);
+
+            List<InputStream> streams = null;
+            switch (bodyType) {
+                case RAW_BODY_TYPE:
+                    // 设置请求体
+                    this.setupRequestBody(request, node, context, variables);
+                    break;
+                case FORM_DATA_BODY_TYPE:
+                    // 设置请求表单
+                    streams = this.setupRequestFormParam(request, node, context, variables);
+                    break;
+                default:
+                    // 设置请求参数
+                    this.setupQueryParams(request, node, context, variables);
+            }
+
             // 设置代理
             this.setupProxy(request, node, context, variables);
 
@@ -186,6 +242,15 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
                 success = false;
                 throwable = e;
             } finally {
+                // 关闭流
+                if (streams != null) {
+                    for (InputStream is : streams) {
+                        try {
+                            IOUtils.close(is);
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
                 if (!success) {
                     if (i < retryCount) {
                         // 睡眠一段时间后重试
@@ -291,6 +356,81 @@ public class RequestExecutor implements NodeExecutor, Grammarly {
             }
         }
         return result;
+    }
+
+    /**
+     * 设置请求体
+     *
+     * @param request   请求包装对象
+     * @param node      节点
+     * @param context   执行上下文
+     * @param variables 传递的变量与值
+     */
+    private void setupRequestBody(HttpRequest request, SpiderNode node, SpiderContext context, Map<String, Object> variables) {
+        String contentType = node.getJsonProperty(BODY_CONTENT_TYPE);
+        request.contentType(contentType);
+        try {
+            Object requestBody = expressionParser.parse(node.getJsonProperty(REQUEST_BODY), variables);
+            context.pause(node.getNodeId(), WebSocketEvent.REQUEST_BODY_EVENT, REQUEST_BODY, requestBody);
+            request.requestBody(requestBody);
+            log.info("设置请求 Body：{}", requestBody);
+        } catch (Exception e) {
+            log.debug("设置请求 Body 出错", e);
+        }
+    }
+
+    /**
+     * 设置请求表单参数
+     *
+     * @param request   请求包装对象
+     * @param node      节点
+     * @param context   执行上下文
+     * @param variables 传递的变量与值
+     * @return 表单中的二进制数据输入流集合
+     */
+    private List<InputStream> setupRequestFormParam(HttpRequest request, SpiderNode node, SpiderContext context, Map<String, Object> variables) {
+        List<Map<String, String>> formParams = node.getJsonArrayProperty(FORM_PARAM_NAME, FORM_PARAM_VALUE, FORM_PARAM_TYPE, FORM_PARAM_FILENAME);
+        List<InputStream> streams = new ArrayList<>();
+        if (formParams != null) {
+            for (Map<String, String> nameValue : formParams) {
+                Object value;
+                String paramName = nameValue.get(FORM_PARAM_NAME);
+                if (StringUtils.isNotBlank(paramName)) {
+                    String paramValue = nameValue.get(FORM_PARAM_VALUE);
+                    String paramType = nameValue.get(FORM_PARAM_TYPE);
+                    String paramFilename = nameValue.get(FORM_PARAM_FILENAME);
+                    boolean hasFile = "file".equals(paramType);
+                    try {
+                        value = expressionParser.parse(paramValue, variables);
+                        if (hasFile) {
+                            InputStream stream = null;
+                            if (value instanceof byte[]) {
+                                stream = new ByteArrayInputStream((byte[]) value);
+                            } else if (value instanceof String) {
+                                stream = new ByteArrayInputStream(((String) value).getBytes());
+                            } else if (value instanceof InputStream) {
+                                stream = (InputStream) value;
+                            }
+                            if (stream != null) {
+                                streams.add(stream);
+                                request.data(paramName, paramFilename, stream);
+                                context.pause(node.getNodeId(), WebSocketEvent.REQUEST_BODY_EVENT, paramName, paramFilename);
+                                log.info("设置请求表单参数：{} = {}", paramName, paramFilename);
+                            } else {
+                                log.warn("设置请求表单参数：{} 失败，无二进制内容", paramName);
+                            }
+                        } else {
+                            request.data(paramName, value);
+                            context.pause(node.getNodeId(), WebSocketEvent.REQUEST_BODY_EVENT, paramName, value);
+                            log.info("设置请求表单参数：{} = {}", paramName, value);
+                        }
+                    } catch (Exception e) {
+                        log.error("设置请求表单参数：{} 出错", paramName, e);
+                    }
+                }
+            }
+        }
+        return streams;
     }
 
     /**

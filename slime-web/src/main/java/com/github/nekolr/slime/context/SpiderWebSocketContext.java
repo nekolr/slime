@@ -9,8 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
-import javax.websocket.Session;
 import java.util.Date;
 
 /**
@@ -22,12 +23,12 @@ public class SpiderWebSocketContext extends SpiderContext {
     @Setter
     private boolean debug;
 
-    private Session session;
+    private WebSocketSession session;
 
     private Object lock = new Object();
 
 
-    public SpiderWebSocketContext(Session session) {
+    public SpiderWebSocketContext(WebSocketSession session) {
         this.session = session;
     }
 
@@ -46,7 +47,7 @@ public class SpiderWebSocketContext extends SpiderContext {
             String message = JSON.toJSONString(event, FastJsonSerializer.serializeConfig);
             if (session.isOpen()) {
                 synchronized (session) {
-                    session.getBasicRemote().sendText(message);
+                    session.sendMessage(new TextMessage(message));
                 }
             }
         } catch (Throwable ignored) {

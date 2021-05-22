@@ -50,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/").anonymous()
                 // 登录请求不拦截（如果登录请求头包含 Authorization: Bearer 任意字符，那么还是会进行校验）
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                // 允许 websocket 请求
+                .antMatchers("/ws").permitAll()
                 // 其他所有请求都要经过验证
                 .anyRequest().authenticated();
 
