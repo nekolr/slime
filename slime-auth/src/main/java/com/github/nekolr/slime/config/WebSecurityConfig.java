@@ -31,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().contentTypeOptions().and().and()
                 // X-XSS-Protection: 1; mode=block
                 .headers().xssProtection().xssProtectionEnabled(true).and().and()
+                // 关闭登出
+                .logout().disable()
                 // 关闭 csrf
                 .csrf().disable()
                 // 授权异常处理
