@@ -5,6 +5,8 @@ import com.github.nekolr.slime.domain.dto.ProxyDTO;
 import com.github.nekolr.slime.service.ProxyService;
 import com.github.nekolr.slime.support.ProxyManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.task.TaskSchedulerBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +37,17 @@ public class ProxyCleanJob {
     @Resource
     private ProxyManager proxyManager;
 
-    @Resource
+    /**
+     * 在使用了 @EnableWebSocket 之后，自动配置类就不会生效，需要手动创建
+     */
+    @Resource(name = "proxyCleanThreadPoolTaskScheduler")
     private ThreadPoolTaskScheduler scheduler;
 
+
+    @Bean
+    public ThreadPoolTaskScheduler proxyCleanThreadPoolTaskScheduler(TaskSchedulerBuilder builder) {
+        return builder.build();
+    }
 
     @PostConstruct
     public void initialize() {

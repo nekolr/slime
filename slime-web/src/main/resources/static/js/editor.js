@@ -1174,11 +1174,11 @@ function onCanvasViewerClick(e, source) {
 
 function createWebSocket(options) {
     options = options || {};
-    var socket = new WebSocket(options.url || (location.origin.replace("http", 'ws') + '/ws'));
+    var socket = new WebSocket(options.url || (location.origin.replace("http", 'ws') + '/ws?token=' + localStorage.getItem("slime_token")));
     socket.onopen = options.onopen;
     socket.onmessage = options.onmessage;
     socket.onerror = options.onerror || function () {
-        layer.layer.msg('WebSocket 错误');
+        layer.msg('WebSocket 错误');
     }
     return socket;
 }
