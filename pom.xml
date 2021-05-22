@@ -47,7 +47,7 @@
         <xsoup.version>0.3.2</xsoup.version>
         <jjwt.version>0.11.2</jjwt.version>
         <!-- 项目版本号 -->
-        <revision>0.0.1</revision>
+        <revision>0.0.2</revision>
     </properties>
 
     <dependencyManagement>
