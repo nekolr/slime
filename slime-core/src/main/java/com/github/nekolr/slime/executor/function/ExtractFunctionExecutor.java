@@ -1,6 +1,7 @@
 package com.github.nekolr.slime.executor.function;
 
 import com.github.nekolr.slime.util.ExtractUtils;
+import com.github.nekolr.slime.util.FeedUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import com.github.nekolr.slime.annotation.Comment;
@@ -139,6 +140,12 @@ public class ExtractFunctionExecutor implements FunctionExecutor {
             return ExtractUtils.getAttrBySelector(getElement(object), selector, attrValue);
         }
         return null;
+    }
+
+    @Comment("通过响应内容构建 feed 抽取器")
+    @Example("${extract.feed(resp.html)}")
+    public static Object feed(Object xml) {
+        return FeedUtils.getFeed((String) xml);
     }
 
     private static Element getElement(Object object) {

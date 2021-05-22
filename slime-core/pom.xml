@@ -62,12 +62,16 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>${jsoup.version}</version>
         </dependency>
         <!-- xpath parser -->
         <dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>xsoup</artifactId>
+        </dependency>
+        <!-- rome -->
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
         </dependency>
         <!-- mapstruct -->
         <dependency>

@@ -46,6 +46,7 @@
         <jsoup.version>1.13.1</jsoup.version>
         <xsoup.version>0.3.2</xsoup.version>
         <jjwt.version>0.11.2</jjwt.version>
+        <rome.version>1.15.0</rome.version>
         <!-- 项目版本号 -->
         <revision>0.0.2</revision>
     </properties>
@@ -111,6 +112,12 @@
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
                 <version>${xsoup.version}</version>
+            </dependency>
+            <!-- rome -->
+            <dependency>
+                <groupId>com.rometools</groupId>
+                <artifactId>rome</artifactId>
+                <version>${rome.version}</version>
             </dependency>
             <!-- fastjson -->
             <dependency>
