@@ -10,21 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class ProxyCleanJob {
-
-    private ThreadPoolExecutor pool;
 
     private ScheduledFuture<?> future;
 
@@ -46,12 +40,8 @@ public class ProxyCleanJob {
 
     @Bean
     public ThreadPoolTaskScheduler proxyCleanThreadPoolTaskScheduler(TaskSchedulerBuilder builder) {
+        builder.poolSize(8);
         return builder.build();
-    }
-
-    @PostConstruct
-    public void initialize() {
-        pool = new ThreadPoolExecutor(8, 8, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 
 
@@ -82,7 +72,7 @@ public class ProxyCleanJob {
         List<ProxyDTO> proxies = proxyService.findAll();
         if (!proxies.isEmpty()) {
             for (ProxyDTO proxy : proxies) {
-                pool.submit(() -> {
+                scheduler.submit(() -> {
                     if (proxyManager.check(proxy) == -1) {
                         proxyManager.remove(proxy);
                     } else {
