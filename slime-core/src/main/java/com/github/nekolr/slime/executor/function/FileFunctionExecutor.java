@@ -98,7 +98,7 @@ public class FileFunctionExecutor implements FunctionExecutor {
     }
 
     @Comment("下载 Url 资源")
-    @Example("${file.download('e:/downloadPath',urls)}")
+    @Example("${file.download('e:/downloadPath',url)}")
     public static void download(String path, String url) throws IOException {
         if (url != null) {
             FileUtils.downloadFile(path, url, true);
