@@ -92,7 +92,17 @@ public class FileFunctionExecutor implements FunctionExecutor {
     public static void download(String path, List<String> urls) throws IOException {
         if (!CollectionUtils.isEmpty(urls)) {
             for (String url : urls) {
-                FileUtils.downloadFile(path, url, true);
+                FileUtils.downloadFile(path, url, "", true);
+            }
+        }
+    }
+
+    @Comment("通过代理下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',urls)}")
+    public static void download(String path, String proxy, List<String> urls) throws IOException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                FileUtils.downloadFile(path, url, proxy, true);
             }
         }
     }
@@ -101,7 +111,15 @@ public class FileFunctionExecutor implements FunctionExecutor {
     @Example("${file.download('e:/downloadPath',url)}")
     public static void download(String path, String url) throws IOException {
         if (url != null) {
-            FileUtils.downloadFile(path, url, true);
+            FileUtils.downloadFile(path, url, "", true);
+        }
+    }
+
+    @Comment("通过代理下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',url)}")
+    public static void download(String path, String proxy, String url) throws IOException {
+        if (url != null) {
+            FileUtils.downloadFile(path, url, proxy, true);
         }
     }
 
