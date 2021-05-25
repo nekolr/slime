@@ -39,6 +39,7 @@ public class Function {
     /**
      * 函数内容
      */
+    @Column(columnDefinition = "longtext")
     private String script;
 
     /**

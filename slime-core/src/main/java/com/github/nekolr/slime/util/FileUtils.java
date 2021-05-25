@@ -1,6 +1,11 @@
 package com.github.nekolr.slime.util;
 
+import com.github.nekolr.slime.constant.Constants;
+import com.github.nekolr.slime.support.UserAgentManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.*;
@@ -9,12 +14,15 @@ import java.net.*;
  * 文件处理工具类
  */
 @Slf4j
+@Component
 public class FileUtils {
+
+    private static UserAgentManager userAgentManager;
 
     public static String FILENAME_PATTERN = "[a-zA-Z0-9_\\-\\|\\.\\u4e00-\\u9fa5]+";
 
     /**
-     * 输出指定文件的byte数组
+     * 输出指定文件的 byte 数组
      *
      * @param filePath 文件路径
      * @param os       输出流
@@ -116,18 +124,18 @@ public class FileUtils {
         }
     }
 
-    public static DownloadStatus downloadFile(String savePath, String fileUrl, boolean downNew) {
-        URL urlfile = null;
+    public static DownloadStatus downloadFile(String savePath, String url, String proxy, boolean downNew) {
+        URL fileUrl = null;
         HttpURLConnection httpUrl = null;
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
-        if (fileUrl.startsWith("//")) {
-            fileUrl = "http:" + fileUrl;
+        if (url.startsWith("//")) {
+            url = "http:" + url;
         }
         String fileName;
         try {
-            urlfile = new URL(fileUrl);
-            String urlPath = urlfile.getPath();
+            fileUrl = new URL(url);
+            String urlPath = fileUrl.getPath();
             fileName = urlPath.substring(urlPath.lastIndexOf("/") + 1);
         } catch (MalformedURLException e) {
             log.error("URL 异常", e);
@@ -147,8 +155,18 @@ public class FileUtils {
             }
         }
         try {
-            httpUrl = (HttpURLConnection) urlfile.openConnection();
-            httpUrl.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0");
+            if (StringUtils.isNotBlank(proxy)) {
+                String[] proxyArr = StringUtils.split(proxy, Constants.PROXY_HOST_PORT_SEPARATOR);
+                if (proxyArr.length == 2) {
+                    InetSocketAddress socketAddress = new InetSocketAddress(proxyArr[0], Integer.parseInt(proxyArr[1]));
+                    Proxy p = new Proxy(Proxy.Type.HTTP, socketAddress);
+                    httpUrl = (HttpURLConnection) fileUrl.openConnection(p);
+                    log.info("设置下载代理：{}:{}", proxyArr[0], proxyArr[1]);
+                }
+            } else {
+                httpUrl = (HttpURLConnection) fileUrl.openConnection();
+            }
+            httpUrl.setRequestProperty("User-Agent", userAgentManager.getRandom());
             // 读取超时时间
             httpUrl.setReadTimeout(60000);
             // 连接超时时间
@@ -156,13 +174,13 @@ public class FileUtils {
             httpUrl.connect();
             bis = new BufferedInputStream(httpUrl.getInputStream());
             bos = new BufferedOutputStream(new FileOutputStream(file));
-            int len = 2048;
-            byte[] b = new byte[len];
-            long readLen = 0;
-            while ((len = bis.read(b)) != -1) {
-                bos.write(b, 0, len);
+            final int len = 2048;
+            byte[] buf = new byte[len];
+            int readLen;
+            while ((readLen = bis.read(buf)) != -1) {
+                bos.write(buf, 0, readLen);
             }
-            log.info("远程文件下载成功：" + fileUrl);
+            log.info("远程文件下载成功：" + url);
             bos.flush();
             bis.close();
             httpUrl.disconnect();
@@ -185,5 +203,10 @@ public class FileUtils {
                 log.error("下载出错", e);
             }
         }
+    }
+
+    @Autowired
+    public void setUserAgentManager(UserAgentManager userAgentManager) {
+        FileUtils.userAgentManager = userAgentManager;
     }
 }

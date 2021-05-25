@@ -23,14 +23,14 @@ public class ArrayFunctionExtension implements FunctionExtension {
         return objs.length;
     }
 
-    @Comment("将数组拼接起来")
-    @Example("${arrayVar.join()}")
+    @Comment("将数组用 separator 拼接起来")
+    @Example("${arrayVar.join('-')}")
     public static String join(Object[] objs, String separator) {
         return StringUtils.join(objs, separator);
     }
 
-    @Comment("将数组用 separator 拼接起来")
-    @Example("${arrayVar.join('-')}")
+    @Comment("将数组拼接起来")
+    @Example("${arrayVar.join()}")
     public static String join(Object[] objs) {
         return StringUtils.join(objs);
     }
