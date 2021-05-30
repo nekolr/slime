@@ -58,4 +58,41 @@ public class UserAgentManager {
         int useragentIndex = RandomUtils.nextInt(0, userAgents.size());
         return user_agents.get(browserIndex).useragent.get(useragentIndex);
     }
+
+    /**
+     * 获取任意一款浏览器最新的 User-Agent
+     *
+     * @return 一个最新的 User-Agent
+     */
+    public String getNewest() {
+        int browserIndex = RandomUtils.nextInt(0, user_agents.size());
+        return user_agents.get(browserIndex).useragent.get(0);
+    }
+
+    /**
+     * 获取 Chrome 浏览器最新的 User-Agent
+     *
+     * @return 一个最新的 User-Agent
+     */
+    public String getChromeNewest() {
+        return user_agents.get(0).useragent.get(0);
+    }
+
+    /**
+     * 获取 FireFox 浏览器最新的 User-Agent
+     *
+     * @return 一个最新的 User-Agent
+     */
+    public String getFireFoxNewest() {
+        return user_agents.get(1).useragent.get(0);
+    }
+
+    /**
+     * 获取 Edge 浏览器最新的 User-Agent
+     *
+     * @return 一个最新的 User-Agent
+     */
+    public String getEdgeNewest() {
+        return user_agents.get(2).useragent.get(0);
+    }
 }

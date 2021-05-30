@@ -166,7 +166,7 @@ public class FileUtils {
             } else {
                 httpUrl = (HttpURLConnection) fileUrl.openConnection();
             }
-            httpUrl.setRequestProperty("User-Agent", userAgentManager.getRandom());
+            httpUrl.setRequestProperty("User-Agent", userAgentManager.getChromeNewest());
             // 读取超时时间
             httpUrl.setReadTimeout(60000);
             // 连接超时时间
