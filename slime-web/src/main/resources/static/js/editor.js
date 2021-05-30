@@ -632,6 +632,12 @@ $(function () {
                 image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMklEQVRYR+2WwXHTQBSGv+fMkNwIB7BvMRVgV0DoIFRAUoGlCpJUsKICnApCB4QKcCrAvslwwEebGfyYp2g1QgmytBmPOaCjtLv/t+/9+neFHT+yY31aAxw6PdwXzgVOgH5lA1OEcTqSy6Ybaw3QdZqIMKoTUOX9PJaoCUQIwEKEp7+U4fdYJmWR504He8IXYJpG8tK+9RJVP0ZhIkKSjuTKv9sOgDJLY8naUwYog6yUN4tYFq0Bek4vEM5ry6tcprFclMeYd57AcQcShCOrxjySYWsAWzTzgZlQOPoDRJkB46p4FeQAJtlc5SwIoIm56sa8cHrSEa4zTzx2sZD51o4D4YfN3QlAz2kf4evOAIoWKLetKxCShD2np2ksY9txXn7Lin6QCdsmoYkjfFgqz/Y7vBYlMXFVbuexDB6sQNdphPBOYOBNlkaSje06bZyEXrxqVBNfwfG9IMrL+6ksHASQJ2EVwIQFEt+OeybsOrWsfoUyW0P0E26MsryDtknoIXwFq9UoWmBlF8GZ+BIGVeHyxLZJWDZhHUC2+7Xy9lssH0MCJmROUQF/aplb63YfIlI3598B8AbcWQsKE8J0qQx9G3pO7Xg99WUMScJGLchD5u43hKkK0WrN5/zUGqeRnBV3gW3dCbPdwU0OUQXPINokYRPDPhjF9t8qWC5YNe4e5cpa0QigdCfcBLHxNMx+z1zcFmubhI8HqJiw8EHgnfCvSbiJdFvfN7ZgW8J+3f8AvwFIqFFyobd5IgAAAABJRU5ErkJggg==',
                 title: '子流程',
                 desc: '执行其他流程，父子流程变量共享'
+            },
+            {
+                name: 'delay',
+                image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB0klEQVRYhe1XwZGDMAxMCf4E60kJKYESKIESKIEOpA4ogRJSAiVQQkrYe8TiHGKMbXJ53c7wAkvr9Uoyl8s/TsAKZhIsVjBZwUSMgRj1twkg8NyJ0X2PAKMmRkeC0QoeSsQKJsMwRcFTFiqB7bfE6JSIFTyujFtW8ivj5gKMJQR0A1YwrcfCaJKSu4Uq7VBKQEGMQZVIMigJRrdgNgwTY14xWsvoU2OS4B7/kNFsz22V8mR5qVoVo40xvYekX4kl7HYPV8ZNN3f0wRw6UytgfV+qhrfB9/WW0bsEvBdAZXSG6rIJPHtF2NxaMrEzIkbtd7wY2RAMw6iK78Fj8nioGO2GxJzTaKzgEfQBCRYSICXISvb3WVIJ7ObZZRaAK82Xnv8JAodd7SXQszQXN/maTALviqms2YMjA3ETas8+0WyOoAYOVo+yyzFULg5LXQ2Sc6apIEatRt/1mVfjH1dhnYgHI95vt1ldLhrTtXkSLIdVplI5tt3Z5BWjVemjo3hDovGuUkNpcsvoizfjk8gdwW60682qaHL6gRa/5e4FMwzjTOxfzZdk2WNwJlqJ+EPICmZ/LuiuLaMv/ifYgzMUb/+InMlmEozEaD6eOIavJvsL/ABOi1Xsd4ZjagAAAABJRU5ErkJggg==',
+                title: '延迟执行',
+                desc: '延迟执行，延迟时间的单位是毫秒'
             }
         ];
         var addShape = function (shape) {
