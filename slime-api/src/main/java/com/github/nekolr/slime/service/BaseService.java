@@ -3,13 +3,23 @@ package com.github.nekolr.slime.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface BaseService<T> {
 
-    void removeById(Long id);
+    default void removeById(Long id) { }
 
-    T save(T entity);
+    default T save(T entity) {
+        return null;
+    }
 
-    Page<T> findAll(Pageable pageable);
+    default Page<T> findAll(Pageable pageable) {
+        return null;
+    }
 
-    T getById(Long id);
+    default T getById(Long id) {
+        return null;
+    }
+
+    default void deleteInBatch(List<T> entries) { }
 }

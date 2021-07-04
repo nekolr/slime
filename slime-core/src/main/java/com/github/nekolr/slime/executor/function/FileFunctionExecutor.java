@@ -5,12 +5,14 @@ import org.apache.commons.io.IOUtils;
 import com.github.nekolr.slime.annotation.Comment;
 import com.github.nekolr.slime.annotation.Example;
 import com.github.nekolr.slime.executor.FunctionExecutor;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 文件读写
@@ -97,12 +99,38 @@ public class FileFunctionExecutor implements FunctionExecutor {
         }
     }
 
+    @Comment("随机延时（单位毫秒）下载 Url 资源")
+    @Example("${file.download('e:/downloadPath',urls,[1000,4000])}")
+    public static void download(String path, List<String> urls, List<Integer> randomRange)
+            throws IOException, InterruptedException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
+                TimeUnit.MILLISECONDS.sleep(sleepMillis);
+                FileUtils.downloadFile(path, url, "", false);
+            }
+        }
+    }
+
     @Comment("通过代理下载 Url 资源")
     @Example("${file.download('e:/downloadPath','127.0.0.1:9999',urls)}")
     public static void download(String path, String proxy, List<String> urls) throws IOException {
         if (!CollectionUtils.isEmpty(urls)) {
             for (String url : urls) {
                 FileUtils.downloadFile(path, url, proxy, true);
+            }
+        }
+    }
+
+    @Comment("通过代理并使用随机延时（单位毫秒）来下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',urls,[1000,4000])}")
+    public static void download(String path, String proxy, List<String> urls, List<Integer> randomRange)
+            throws IOException, InterruptedException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
+                TimeUnit.MILLISECONDS.sleep(sleepMillis);
+                FileUtils.downloadFile(path, url, proxy, false);
             }
         }
     }
