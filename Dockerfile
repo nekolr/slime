@@ -19,4 +19,4 @@ COPY --from=build /usr/src/app/slime-web/target/slime.jar .
 
 EXPOSE 8086
 
-CMD java -jar slime.jar
+CMD java -Djava.security.egd=file:/dev/./urandom -jar slime.jar
