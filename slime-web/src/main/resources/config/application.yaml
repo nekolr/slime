@@ -24,7 +24,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   # datasource
   datasource:
-    url: jdbc:h2:file:~/slime/db;FILE_LOCK=FS
+    url: jdbc:h2:file:~/slime/db/db;FILE_LOCK=FS
     username: sa
     password: sa
   # jpa
