@@ -22,5 +22,7 @@ EXPOSE 8086
 # Add Tini
 RUN apk add --no-cache tini
 # Tini is now available at /sbin/tini
+ENTRYPOINT ["/sbin/tini", "--"]
+
 # Run java under Tini
-ENTRYPOINT ["/sbin/tini", "--", "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "slime.jar"]
+CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "slime.jar"]
