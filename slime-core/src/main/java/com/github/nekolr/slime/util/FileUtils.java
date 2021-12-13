@@ -124,7 +124,7 @@ public class FileUtils {
         }
     }
 
-    public static DownloadStatus downloadFile(String savePath, String url, String proxy, boolean downNew) {
+    public static DownloadStatus downloadFile(String savePath, String url, String proxy, boolean downNew, boolean saveOriginPath) {
         URL fileUrl = null;
         HttpURLConnection httpUrl = null;
         BufferedInputStream bis = null;
@@ -136,7 +136,13 @@ public class FileUtils {
         try {
             fileUrl = new URL(url);
             String urlPath = fileUrl.getPath();
-            fileName = urlPath.substring(urlPath.lastIndexOf("/") + 1);
+
+            if (saveOriginPath) {
+                fileName = urlPath;
+            } else {
+                fileName = urlPath.substring(urlPath.lastIndexOf("/") + 1);
+            }
+
         } catch (MalformedURLException e) {
             log.error("URL 异常", e);
             return DownloadStatus.URL_ERROR;
@@ -153,6 +159,8 @@ public class FileUtils {
                 log.info("文件已存在，不重新下载");
                 return DownloadStatus.FILE_EXIST;
             }
+        } else if (!file.getParentFile().exists() && saveOriginPath) {
+            file.getParentFile().mkdirs();
         }
         try {
             if (StringUtils.isNotBlank(proxy)) {
