@@ -8,7 +8,6 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -65,42 +64,6 @@ public class FeedFunctionExtension implements FunctionExtension {
     @Example("${feedVar.entries(0)}")
     public static SyndEntry entries(SyndFeed feed, int index) {
         return FeedUtils.getEntry(feed, index).orElse(null);
-    }
-
-    @Comment("获取实体的作者")
-    @Example("${feedVar.author(entry)}")
-    public static String author(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getAuthor(entry);
-    }
-
-    @Comment("获取实体的链接")
-    @Example("${feedVar.link(entry)}")
-    public static String link(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getLink(entry);
-    }
-
-    @Comment("获取实体的标题")
-    @Example("${feedVar.title(entry)}")
-    public static String title(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getTitle(entry);
-    }
-
-    @Comment("获取实体的 uri（guid）")
-    @Example("${feedVar.uri(entry)}")
-    public static String uri(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getUri(entry);
-    }
-
-    @Comment("获取实体的描述")
-    @Example("${feedVar.desc(entry)}")
-    public static String desc(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getDescription(entry);
-    }
-
-    @Comment("获取实体的发布时间")
-    @Example("${feedVar.pubDate(entry)}")
-    public static Date pubDate(SyndFeed feed, SyndEntry entry) {
-        return FeedUtils.getPublishedDate(entry);
     }
 
 }
