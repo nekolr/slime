@@ -94,7 +94,17 @@ public class FileFunctionExecutor implements FunctionExecutor {
     public static void download(String path, List<String> urls) throws IOException {
         if (!CollectionUtils.isEmpty(urls)) {
             for (String url : urls) {
-                FileUtils.downloadFile(path, url, "", true);
+                FileUtils.downloadFile(path, url, "", true, false);
+            }
+        }
+    }
+
+    @Comment("下载 Url 资源，是否保存原始文件路径")
+    @Example("${file.download('e:/downloadPath',urls,false)}")
+    public static void download(String path, List<String> urls, boolean saveOriginPath) throws IOException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                FileUtils.downloadFile(path, url, "", true, saveOriginPath);
             }
         }
     }
@@ -107,7 +117,20 @@ public class FileFunctionExecutor implements FunctionExecutor {
             for (String url : urls) {
                 Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
                 TimeUnit.MILLISECONDS.sleep(sleepMillis);
-                FileUtils.downloadFile(path, url, "", false);
+                FileUtils.downloadFile(path, url, "", false, false);
+            }
+        }
+    }
+
+    @Comment("随机延时（单位毫秒）下载 Url 资源")
+    @Example("${file.download('e:/downloadPath',urls,[1000,4000],false)}")
+    public static void download(String path, List<String> urls, List<Integer> randomRange, boolean saveOriginPath)
+            throws IOException, InterruptedException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
+                TimeUnit.MILLISECONDS.sleep(sleepMillis);
+                FileUtils.downloadFile(path, url, "", false, saveOriginPath);
             }
         }
     }
@@ -117,7 +140,17 @@ public class FileFunctionExecutor implements FunctionExecutor {
     public static void download(String path, String proxy, List<String> urls) throws IOException {
         if (!CollectionUtils.isEmpty(urls)) {
             for (String url : urls) {
-                FileUtils.downloadFile(path, url, proxy, true);
+                FileUtils.downloadFile(path, url, proxy, true, false);
+            }
+        }
+    }
+
+    @Comment("通过代理下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',urls,false)}")
+    public static void download(String path, String proxy, List<String> urls, boolean saveOriginPath) throws IOException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                FileUtils.downloadFile(path, url, proxy, true, saveOriginPath);
             }
         }
     }
@@ -130,7 +163,20 @@ public class FileFunctionExecutor implements FunctionExecutor {
             for (String url : urls) {
                 Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
                 TimeUnit.MILLISECONDS.sleep(sleepMillis);
-                FileUtils.downloadFile(path, url, proxy, false);
+                FileUtils.downloadFile(path, url, proxy, false, false);
+            }
+        }
+    }
+
+    @Comment("通过代理并使用随机延时（单位毫秒）来下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',urls,[1000,4000],false)}")
+    public static void download(String path, String proxy, List<String> urls, List<Integer> randomRange, boolean saveOriginPath)
+            throws IOException, InterruptedException {
+        if (!CollectionUtils.isEmpty(urls)) {
+            for (String url : urls) {
+                Long sleepMillis = RandomUtils.nextLong(randomRange.get(0), randomRange.get(1));
+                TimeUnit.MILLISECONDS.sleep(sleepMillis);
+                FileUtils.downloadFile(path, url, proxy, false, saveOriginPath);
             }
         }
     }
@@ -139,7 +185,15 @@ public class FileFunctionExecutor implements FunctionExecutor {
     @Example("${file.download('e:/downloadPath',url)}")
     public static void download(String path, String url) throws IOException {
         if (url != null) {
-            FileUtils.downloadFile(path, url, "", true);
+            FileUtils.downloadFile(path, url, "", true, false);
+        }
+    }
+
+    @Comment("下载 Url 资源")
+    @Example("${file.download('e:/downloadPath',url,false)}")
+    public static void download(String path, String url, boolean saveOriginPath) throws IOException {
+        if (url != null) {
+            FileUtils.downloadFile(path, url, "", true, saveOriginPath);
         }
     }
 
@@ -147,7 +201,15 @@ public class FileFunctionExecutor implements FunctionExecutor {
     @Example("${file.download('e:/downloadPath','127.0.0.1:9999',url)}")
     public static void download(String path, String proxy, String url) throws IOException {
         if (url != null) {
-            FileUtils.downloadFile(path, url, proxy, true);
+            FileUtils.downloadFile(path, url, proxy, true, false);
+        }
+    }
+
+    @Comment("通过代理下载 Url 资源")
+    @Example("${file.download('e:/downloadPath','127.0.0.1:9999',url,false)}")
+    public static void download(String path, String proxy, String url, boolean saveOriginPath) throws IOException {
+        if (url != null) {
+            FileUtils.downloadFile(path, url, proxy, true, saveOriginPath);
         }
     }
 

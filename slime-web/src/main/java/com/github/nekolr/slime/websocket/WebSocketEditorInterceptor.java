@@ -6,20 +6,19 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
 
-public class WebSocketEditorInterceptor extends HttpSessionHandshakeInterceptor {
+public class WebSocketEditorInterceptor implements HandshakeInterceptor {
 
     private static final String TOKEN_PARAMETER = "token";
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                   WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+    public boolean beforeHandshake(ServerHttpRequest req, ServerHttpResponse resp, WebSocketHandler handler, Map<String, Object> attributes) throws Exception {
 
-        if (request instanceof ServletServerHttpRequest) {
-            ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
+        if (req instanceof ServletServerHttpRequest) {
+            ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) req;
             String token = serverRequest.getServletRequest().getParameter(TOKEN_PARAMETER);
             if (StringUtils.isBlank(token)) {
                 return false;
@@ -31,6 +30,11 @@ public class WebSocketEditorInterceptor extends HttpSessionHandshakeInterceptor 
             }
         }
 
-        return super.beforeHandshake(request, response, wsHandler, attributes);
+        return true;
+    }
+
+    @Override
+    public void afterHandshake(ServerHttpRequest req, ServerHttpResponse resp, WebSocketHandler handler, Exception e) {
+
     }
 }
