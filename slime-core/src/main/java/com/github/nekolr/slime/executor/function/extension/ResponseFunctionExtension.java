@@ -7,7 +7,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import com.github.nekolr.slime.annotation.Comment;
 import com.github.nekolr.slime.annotation.Example;
-import com.github.nekolr.slime.annotation.Return;
 import com.github.nekolr.slime.executor.FunctionExtension;
 import com.github.nekolr.slime.io.SpiderResponse;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,6 @@ public class ResponseFunctionExtension implements FunctionExtension {
 
     @Comment("根据 xpath 在请求结果中查找")
     @Example("${resp.xpath('//title/text()')}")
-    @Return({Element.class, String.class})
     public static String xpath(SpiderResponse response, String xpath) {
         return ExtractUtils.getValueByXPath(element(response), xpath);
     }

@@ -2,6 +2,7 @@ package com.github.nekolr.slime.executor.function;
 
 import com.github.nekolr.slime.util.ExtractUtils;
 import com.github.nekolr.slime.util.FeedUtils;
+import com.rometools.rome.feed.synd.SyndFeed;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import com.github.nekolr.slime.annotation.Comment;
@@ -144,7 +145,7 @@ public class ExtractFunctionExecutor implements FunctionExecutor {
 
     @Comment("通过响应内容构建 feed 抽取器")
     @Example("${extract.feed(resp.html)}")
-    public static Object feed(Object xml) {
+    public static SyndFeed feed(Object xml) {
         return FeedUtils.getFeed((String) xml);
     }
 

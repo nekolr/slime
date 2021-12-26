@@ -5,10 +5,13 @@ import com.github.nekolr.slime.executor.FunctionExecutor;
 import com.github.nekolr.slime.executor.FunctionExtension;
 import com.github.nekolr.slime.expression.interpreter.AbstractReflection;
 import com.github.nekolr.slime.io.SpiderResponse;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -27,6 +30,25 @@ public class DefaultExpressionEngine implements ExpressionEngine {
     @SuppressWarnings("all")
     private List<FunctionExtension> functionExtensions;
 
+    /**
+     * 扩展类型
+     */
+    private List<Class> extensionClasses = Arrays.asList(
+            SpiderResponse.class,
+            Element.class,
+            Elements.class,
+            String.class,
+            Object.class,
+            Date.class,
+            Integer.class,
+            List.class,
+            Object[].class,
+            Map.class,
+            SqlRowSet.class,
+            SyndFeed.class,
+            SyndEntry.class
+    );
+
     @PostConstruct
     private void init() {
         for (FunctionExtension extension : functionExtensions) {
@@ -35,14 +57,17 @@ public class DefaultExpressionEngine implements ExpressionEngine {
     }
 
     public Map<String, ExpressionObject> getExpressionObjectMap() {
+
         Map<String, ExpressionObject> objectMap = new HashMap<>();
+
         functionExecutors.forEach(functionExecutor -> {
             ExpressionObject object = new ExpressionObject();
             object.setClassName(functionExecutor.getFunctionPrefix());
             object.setMethods(getMethod(functionExecutor.getClass(), true));
             objectMap.put(object.getClassName(), object);
         });
-        Arrays.asList(SpiderResponse.class, Element.class, Elements.class, String.class, Object.class, Date.class, Integer.class, List.class, Object[].class).forEach(clazz -> {
+
+        extensionClasses.forEach(clazz -> {
             ExpressionObject object = new ExpressionObject();
             object.setClassName(clazz.getSimpleName());
             getMethod(clazz, false).forEach(method -> {
@@ -56,6 +81,7 @@ public class DefaultExpressionEngine implements ExpressionEngine {
             });
             objectMap.put(object.getClassName(), object);
         });
+
         functionExtensions.forEach(extensions -> {
             ExpressionObject object = objectMap.get(extensions.support().getSimpleName());
             if (object != null) {
@@ -67,6 +93,7 @@ public class DefaultExpressionEngine implements ExpressionEngine {
                 });
             }
         });
+
         return objectMap;
     }
 

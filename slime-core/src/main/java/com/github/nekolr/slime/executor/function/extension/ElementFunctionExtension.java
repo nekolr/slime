@@ -5,7 +5,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import com.github.nekolr.slime.annotation.Comment;
 import com.github.nekolr.slime.annotation.Example;
-import com.github.nekolr.slime.annotation.Return;
 import com.github.nekolr.slime.executor.FunctionExtension;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,6 @@ public class ElementFunctionExtension implements FunctionExtension {
 
     @Comment("根据 xpath 提取内容")
     @Example("${elementVar.xpath('//title/text()')}")
-    @Return({Element.class, String.class})
     public static String xpath(Element element, String xpath) {
         return ExtractUtils.getValueByXPath(element, xpath);
     }
@@ -29,7 +27,6 @@ public class ElementFunctionExtension implements FunctionExtension {
 
     @Comment("根据 xpath 提取内容")
     @Example("${elementVar.xpaths('//h2/text()')}")
-    @Return({Element.class, String.class})
     public static List<String> xpaths(Element element, String xpath) {
         return ExtractUtils.getValuesByXPath(element, xpath);
     }
