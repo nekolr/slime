@@ -48,7 +48,7 @@ public class VariableServiceImpl implements VariableService {
     @PostConstruct
     private void resetGlobalVariables() {
         Map<String, String> variables = variableRepository.findAll().stream()
-                .collect(Collectors.toMap(Variable::getName, Variable::getValue));
+                .collect(Collectors.toMap(Variable::getName, Variable::getVal));
         ExpressionGlobalVariables.reset(variables);
     }
 }

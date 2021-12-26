@@ -35,7 +35,7 @@ public class Variable {
     /**
      * 变量值
      */
-    private String value;
+    private String val;
 
     /**
      * 描述
