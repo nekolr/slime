@@ -47,6 +47,7 @@
         <xsoup.version>0.3.2</xsoup.version>
         <jjwt.version>0.11.2</jjwt.version>
         <rome.version>1.15.0</rome.version>
+        <h2.version>2.0.204</h2.version>
         <!-- 项目版本号 -->
         <revision>0.0.5</revision>
     </properties>
@@ -157,6 +158,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+            <!-- h2 database -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
