@@ -25,6 +25,7 @@
         <module>slime-web</module>
         <module>slime-proxy</module>
         <module>slime-auth</module>
+        <module>slime-selenium</module>
     </modules>
 
     <licenses>
@@ -47,6 +48,7 @@
         <xsoup.version>0.3.2</xsoup.version>
         <jjwt.version>0.11.2</jjwt.version>
         <rome.version>1.15.0</rome.version>
+        <selenium.version>4.1.1</selenium.version>
         <!-- 项目版本号 -->
         <revision>0.0.5</revision>
     </properties>
@@ -99,6 +101,11 @@
             <dependency>
                 <groupId>com.github.nekolr</groupId>
                 <artifactId>slime-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.nekolr</groupId>
+                <artifactId>slime-selenium</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- jsoup -->
@@ -157,6 +164,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+            <!-- selenium -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
