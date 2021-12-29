@@ -65,19 +65,19 @@ public class SeleniumResponseFunctionExtension implements FunctionExtension {
     }
 
     @Comment("执行 js")
-    @Example("${resp.executeScript(\"document.write('hello spider-flow !')\")}")
+    @Example("${resp.executeScript(\"document.write('hello world!')\")}")
     public static Object executeScript(SeleniumResponse response, String script) {
         return executeScript(response, script, null);
     }
 
     @Comment("执行 js")
-    @Example("${resp.executeScript(\"document.write('hello '+arguments[0]+' !')\",\"spider-flow\")}")
+    @Example("${resp.executeScript(\"document.write('hello '+arguments[0]+' !')\",\"world\")}")
     public static Object executeScript(SeleniumResponse response, String script, List<Object> arguments) {
-        JavascriptExecutor executor = null;
+        JavascriptExecutor executor;
         try {
             executor = (JavascriptExecutor) response.getDriver();
         } catch (Throwable e) {
-            throw new RuntimeException("该驱动不支持执行js");
+            throw new RuntimeException("该驱动不支持执行 js");
         }
         return executor.executeScript(script, arguments);
     }

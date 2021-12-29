@@ -125,11 +125,11 @@
 					<input type="checkbox" title="无头模式" value="headless" lay-skin="primary" {{d.data.object['headless'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="禁用 JS" value="javascript-disabled" lay-skin="primary" {{d.data.object['javascript-disabled'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="禁用图片" value="image-disabled" lay-skin="primary" {{d.data.object['image-disabled'] === '1' ? 'checked' : ''}}/>
-					<input type="checkbox" title="禁用插件" value="plugin-disable" lay-skin="primary" {{d.data.object['plugin-disable'] !== '0' ? 'checked' : ''}}/>
-					<input type="checkbox" title="禁用 Java" value="java-disable" lay-skin="primary" {{d.data.object['java-disable'] !== '0' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用插件" value="plugin-disable" lay-skin="primary" {{d.data.object['plugin-disable'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用 Java" value="java-disable" lay-skin="primary" {{d.data.object['java-disable'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="隐身模式" value="incognito" lay-skin="primary" {{d.data.object['incognito'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="沙盒模式" value="sandbox" lay-skin="primary" {{d.data.object['sandbox'] === '1' ? 'checked' : ''}}/>
-					<input type="checkbox" title="隐藏滚动条" value="hide-scrollbar" lay-skin="primary" {{d.data.object['hide-scrollbar'] == '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="隐藏滚动条" value="hide-scrollbar" lay-skin="primary" {{d.data.object['hide-scrollbar'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="最大化" value="maximized" lay-skin="primary" {{d.data.object['maximized'] === '1' ? 'checked' : ''}}/>
 					<input type="checkbox" title="禁用 GPU 加速" value="gpu-disable" lay-skin="primary" {{d.data.object['gpu-disable'] === '1' ? 'checked' : ''}}/>
 				</div>

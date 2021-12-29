@@ -68,7 +68,7 @@ public class FireFoxDriverProvider implements DriverProvider {
             options.addArguments(Arrays.asList(arguments.split("\r\n")));
         }
 
-        String preferences = node.getJsonProperty(ARGUMENTS);
+        String preferences = node.getJsonProperty("preferences");
         if (StringUtils.isNotBlank(preferences)) {
             Arrays.asList(preferences.split("\r\n")).forEach(preference -> {
                 int index = preference.indexOf("=");

@@ -2,11 +2,12 @@ package com.github.nekolr.executor.node;
 
 import com.github.nekolr.driver.DriverProvider;
 import com.github.nekolr.io.SeleniumResponse;
+import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.context.SpiderContext;
 import com.github.nekolr.slime.executor.NodeExecutor;
 import com.github.nekolr.slime.model.Shape;
 import com.github.nekolr.slime.model.SpiderNode;
-import com.github.nekolr.slime.support.ExpressionEngine;
+import com.github.nekolr.slime.support.ExpressionParser;
 import com.github.nekolr.util.SeleniumResponseHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +19,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.net.URL;
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -49,11 +50,11 @@ public class SeleniumExecutor implements NodeExecutor {
 
     private Map<String, DriverProvider> providerMap;
 
-    private final ExpressionEngine expressionEngine;
+    private final ExpressionParser expressionParser;
 
-    public SeleniumExecutor(List<DriverProvider> driverProviders, ExpressionEngine expressionEngine) {
+    public SeleniumExecutor(List<DriverProvider> driverProviders, ExpressionParser expressionParser) {
         this.driverProviders = driverProviders;
-        this.expressionEngine = expressionEngine;
+        this.expressionParser = expressionParser;
     }
 
     @PostConstruct
@@ -65,44 +66,48 @@ public class SeleniumExecutor implements NodeExecutor {
     public void execute(SpiderNode node, SpiderContext context, Map<String, Object> variables) {
         String proxy = node.getJsonProperty(PROXY);
         String driverType = node.getJsonProperty(DRIVER_TYPE);
-        String nodeVariableName = node.getJsonProperty(NODE_VARIABLE_NAME);
-        if (StringUtils.isBlank(nodeVariableName)) {
-            nodeVariableName = "resp";
-        }
+        String nodeVariableName = node.getJsonProperty(NODE_VARIABLE_NAME, "resp");
+        boolean cookieAutoSet = Constants.YES.equals(node.getJsonProperty(COOKIE_AUTO_SET));
+
         if (StringUtils.isBlank(driverType) || !providerMap.containsKey(driverType)) {
             log.error("找不到驱动：{}", driverType);
             return;
         }
+
         if (StringUtils.isNotBlank(proxy)) {
             try {
-                proxy = expressionEngine.execute(proxy, variables).toString();
+                proxy = expressionParser.parse(proxy, variables).toString();
                 log.info("设置代理：{}", proxy);
             } catch (Exception e) {
-                log.error("设置代理出错，异常信息：{}", e);
+                log.error("设置代理出错", e);
             }
         }
+
         Object oldResp = variables.get(nodeVariableName);
         // 一个任务流中只能有一个 Driver，在页面跳转操作可以使用 resp.toUrl。打开其他 Driver 时，原页面会关闭（同一个变量名）
         if (oldResp instanceof SeleniumResponse) {
             SeleniumResponse oldResponse = (SeleniumResponse) oldResp;
             oldResponse.quit();
         }
+
         WebDriver driver = null;
         try {
-            String url = expressionEngine.execute(node.getJsonProperty(URL), variables).toString();
+            String url = expressionParser.parse(node.getJsonProperty(URL), variables).toString();
             log.info("设置请求 url：{}", url);
             driver = providerMap.get(driverType).getWebDriver(node, proxy);
-            driver.manage().timeouts().pageLoadTimeout(NumberUtils.toInt(node.getJsonProperty(PAGE_LOAD_TIMEOUT), 60 * 1000), TimeUnit.MILLISECONDS);
-            driver.manage().timeouts().implicitlyWait(NumberUtils.toInt(node.getJsonProperty(IMPLICITLY_WAIT_TIMEOUT), 3 * 1000), TimeUnit.MILLISECONDS);
-            // 设置自动管理的 Cookie
-            boolean cookieAutoSet = !"0".equals(node.getJsonProperty(COOKIE_AUTO_SET));
-            Map<String, String> cookieContext = context.getCookieContext();
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(NumberUtils.toInt(node.getJsonProperty(PAGE_LOAD_TIMEOUT), 60 * 1000)));
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(NumberUtils.toInt(node.getJsonProperty(IMPLICITLY_WAIT_TIMEOUT), 3 * 1000)));
+
             // 初始化打开浏览器
             driver.get(url);
-            // 设置浏览器 Cookies 环境
+
+            Map<String, String> cookieContext = context.getCookieContext();
+
+            // 如果开启了自动管理 cookies，则将之前的 cookies 添加到浏览器中
             if (cookieAutoSet) {
                 driver.manage().deleteAllCookies();
                 java.net.URL tempUrl = new URL(url);
+                // 设置 cookies 有效期 1 个月
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.MONTH, 1);
                 for (Map.Entry<String, String> item : cookieContext.entrySet()) {
@@ -111,17 +116,21 @@ public class SeleniumExecutor implements NodeExecutor {
                 }
                 log.debug("自动设置Cookie：{}", cookieContext);
             }
-            // 访问跳转 url 网站
+
+            // 访问 url
             driver.get(url);
             SeleniumResponse response = new SeleniumResponse(driver);
             SeleniumResponseHolder.add(context, response);
+
+            // 如果开启了自动管理 cookies，在页面响应后再把 cookies 放到上下文中
             if (cookieAutoSet) {
                 Map<String, String> cookies = response.getCookies();
                 cookieContext.putAll(cookies);
             }
             variables.put(nodeVariableName, response);
+
         } catch (Exception e) {
-            log.error("请求出错，异常信息：{}", e);
+            log.error("请求出错", e);
             if (driver != null) {
                 try {
                     driver.quit();

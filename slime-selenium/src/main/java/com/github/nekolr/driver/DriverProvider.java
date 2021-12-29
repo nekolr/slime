@@ -53,9 +53,9 @@ public interface DriverProvider {
     String INCOGNITO = "incognito";
 
     /**
-     * 沙盒模式
+     * 禁用沙盒模式
      */
-    String SANDBOX = "sandbox";
+    String NO_SANDBOX = "no-sandbox";
 
     /**
      * 窗口大小

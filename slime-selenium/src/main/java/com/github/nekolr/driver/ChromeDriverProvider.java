@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 
 @Component
 public class ChromeDriverProvider implements DriverProvider {
@@ -65,7 +66,7 @@ public class ChromeDriverProvider implements DriverProvider {
         }
 
         // 禁用沙盒模式
-        if (!Constants.YES.equals(node.getJsonProperty(SANDBOX))) {
+        if (Constants.YES.equals(node.getJsonProperty(NO_SANDBOX))) {
             options.addArguments(NO_SANDBOX_OPTION);
         }
 
@@ -112,6 +113,10 @@ public class ChromeDriverProvider implements DriverProvider {
             proxy.setHttpProxy(proxyStr);
             options.setProxy(proxy);
         }
+
+        // 默认去掉 “chrome 正受到自动测试软件的控制” 的通知
+        options.setExperimentalOption("useAutomationExtension", false);
+        options.setExperimentalOption("excludeSwitches", Collections.singleton("enable-automation"));
 
         return new RemoteWebDriver(new URL(node.getJsonProperty(REMOTE_WEBDRIVER_URL)), options);
     }
