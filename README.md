@@ -45,6 +45,7 @@
 - 增加身份认证机制，默认账号和密码都是 slime，可以通过环境变量 `SLIME_USERNAME` 和 `SLIME_PASSWORD` 修改
 - 增加 Feed 解析功能
 - 增加延迟执行节点
+- 通过远程 WebDriver 来操纵浏览器（本地不用再加载驱动，更省心）
 
 ## 感谢
 [spider-flow](https://github.com/ssssssss-team/spider-flow) - 新一代爬虫平台，以图形化方式定义爬虫流程，不写代码即可完成爬虫。
