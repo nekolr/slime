@@ -51,7 +51,7 @@
         <h2.version>1.4.200</h2.version>
         <selenium.version>4.1.1</selenium.version>
         <!-- 项目版本号 -->
-        <revision>0.0.5</revision>
+        <revision>0.1.0</revision>
     </properties>
 
     <dependencyManagement>
