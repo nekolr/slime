@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.idealized.Javascript;
+import org.openqa.selenium.devtools.v96.V96Javascript;
 import org.openqa.selenium.remote.*;
 import org.springframework.stereotype.Component;
 
@@ -118,6 +122,16 @@ public class ChromeDriverProvider implements DriverProvider {
         options.setExperimentalOption("useAutomationExtension", false);
         options.setExperimentalOption("excludeSwitches", Collections.singleton("enable-automation"));
 
-        return new RemoteWebDriver(new URL(node.getJsonProperty(REMOTE_WEBDRIVER_URL)), options);
+        WebDriver driver = new RemoteWebDriver(new URL(node.getJsonProperty(REMOTE_WEBDRIVER_URL)), options);
+
+        // 每次页面启动都设置 window.navigator.webdriver 为 undefined
+        driver = new Augmenter().augment(driver);
+        HasDevTools hasDevTools = (HasDevTools) driver;
+        DevTools devTools = hasDevTools.getDevTools();
+        devTools.createSession();
+        Javascript javascript = new V96Javascript(devTools);
+        javascript.pin("source", "Object.defineProperty(navigator, 'webdriver', { get: () => undefined })");
+
+        return driver;
     }
 }
