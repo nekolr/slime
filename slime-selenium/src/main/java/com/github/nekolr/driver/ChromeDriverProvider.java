@@ -118,7 +118,8 @@ public class ChromeDriverProvider implements DriverProvider {
         options.setExperimentalOption("useAutomationExtension", false);
         options.setExperimentalOption("excludeSwitches", Collections.singleton("enable-automation"));
 
-        WebDriver driver = new RemoteWebDriver(new URL(node.getJsonProperty(REMOTE_WEBDRIVER_URL)), options);
+        String remoteWebdriverUrl = node.getJsonProperty(REMOTE_WEBDRIVER_URL, DEFAULT_REMOTE_WEBDRIVER_URL);
+        WebDriver driver = new RemoteWebDriver(new URL(remoteWebdriverUrl), options);
 
         return driver;
     }

@@ -15,7 +15,7 @@ public class WebElementFunctionExtension implements FunctionExtension {
         return WebElement.class;
     }
 
-    @Comment("获取节点 html 内容")
+    @Comment("执行键盘动作")
     @Example("${webElementVar.sendKeys('Hello World!')}")
     public static WebElement sendKeys(WebElement element, String keys) {
         element.sendKeys(keys);
@@ -28,7 +28,7 @@ public class WebElementFunctionExtension implements FunctionExtension {
         return element.getAttribute("innerHTML");
     }
 
-    @Comment("获取节点 html 内容")
+    @Comment("获取节点 text 内容")
     @Example("${webElementVar.text()}")
     public static String text(WebElement element) {
         return element.getText();

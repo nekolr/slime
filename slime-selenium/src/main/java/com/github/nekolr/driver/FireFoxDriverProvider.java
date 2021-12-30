@@ -89,7 +89,8 @@ public class FireFoxDriverProvider implements DriverProvider {
         }
         options.setProfile(profile);
 
-        WebDriver webDriver = new RemoteWebDriver(new URL(node.getJsonProperty(REMOTE_WEBDRIVER_URL)), options);
+        String remoteWebdriverUrl = node.getJsonProperty(REMOTE_WEBDRIVER_URL, DEFAULT_REMOTE_WEBDRIVER_URL);
+        WebDriver webDriver = new RemoteWebDriver(new URL(remoteWebdriverUrl), options);
 
         // 最大化
         if (Constants.YES.equals(node.getJsonProperty(MAXIMIZED))) {

@@ -8,7 +8,12 @@ import java.net.MalformedURLException;
 public interface DriverProvider {
 
     /**
-     * 远程 WebDriver URL
+     * 默认的远程 WebDriver 地址
+     */
+    String DEFAULT_REMOTE_WEBDRIVER_URL = "http://localhost:4444";
+
+    /**
+     * 远程 WebDriver 地址
      */
     String REMOTE_WEBDRIVER_URL = "remote-webdriver-url";
 
