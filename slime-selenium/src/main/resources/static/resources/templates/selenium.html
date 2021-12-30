@@ -1,0 +1,146 @@
+<div class="layui-tab layui-tab-fixed layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">基本配置</li>
+    <li>参数设置</li>
+  </ul>
+  <div class="layui-tab-content editor-form-node">
+    <div class="layui-tab-item layui-show">
+    	<form class="layui-form">
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">节点名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="value" placeholder="请输入节点名称" value="{{=d.value}}" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">节点变量</label>
+						<div class="layui-input-block">
+							<input type="text" name="nodeVariableName" placeholder="请输入节点变量（默认为 resp）" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.nodeVariableName}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">循环变量</label>
+						<div class="layui-input-block">
+							<input type="text" name="loopVariableName" placeholder="请输入循环变量" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.loopVariableName}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">循环次数</label>
+						<div class="layui-input-block">
+							<input type="text" name="loopCount" placeholder="请输入循环次数" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.loopCount}}">
+						</div>
+					</div>
+				</div>
+			</div>
+    		<div class="layui-row">
+				<div class="layui-col-md6">
+					<div class="layui-form-item">
+						<label class="layui-form-label">页面加载超时时间</label>
+						<div class="layui-input-block">
+							<input type="number" name="pageLoadTimeout" placeholder="请输入页面加载超时时间" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.pageLoadTimeout}}">
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md6">
+					<div class="layui-form-item">
+						<label class="layui-form-label">元素获取超时时间</label>
+						<div class="layui-input-block">
+							<input type="number" name="implicitlyWaitTimeout" placeholder="请输入元素获取超时时间" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.implicitlyWaitTimeout}}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">驱动类型</label>
+						<div class="layui-input-block">
+							<select name="driverType">
+								<option value="chrome" {{d.data.object.driverType=='chrome' ? 'selected': ''}}>chrome</option>
+								<option value="firefox" {{d.data.object.driverType=='firefox' ? 'selected': ''}}>firefox</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md9">
+					<div class="layui-form-item">
+						<label class="layui-form-label">请求 URL</label>
+						<div codemirror="url" placeholder="请输入请求 url" data-value="{{=d.data.object.url}}" autocomplete="off" class="layui-input-block"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md11">
+					<div class="layui-form-item">
+						<label class="layui-form-label">远程驱动地址</label>
+						<div class="layui-input-block">
+							<input type="text" name="remote-webdriver-url" placeholder="http://localhost:4444" value="{{=d.data.object['remote-webdriver-url']}}" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-row">
+				<div class="layui-col-md4">
+					<div class="layui-form-item">
+						<label class="layui-form-label">代理</label>
+						<div codemirror="proxy" placeholder="host:port" data-value="{{=d.data.object.proxy}}" autocomplete="off" class="layui-input-block"></div>
+					</div>
+				</div>
+				<div class="layui-col-md8">
+					<div class="layui-form-item">
+						<label class="layui-form-label">请求设置</label>
+						<div class="layui-input-block">
+							<input type="checkbox" title="自动管理Cookie" value="cookie-auto-set" lay-skin="primary" {{d.data.object['cookie-auto-set'] == '0' ? '' : 'checked'}}/>
+						</div>
+					</div>
+				</div>
+			</div>
+    	</form>
+    </div>
+    <div class="layui-tab-item">
+    	<form class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">窗口大小</label>
+				<div class="layui-input-block">
+					<input type="text" name="window-size" placeholder="1366,768" value="{{=d.data.object['window-size']}}" autocomplete="off" class="layui-input input-default">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">User-Agent</label>
+				<div class="layui-input-block">
+					<input type="text" name="user-agent" placeholder="" value="{{=d.data.object['user-agent']}}" autocomplete="off" class="layui-input input-default">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">驱动参数</label>
+				<div class="layui-input-block">
+					<input type="checkbox" title="无头模式" value="headless" lay-skin="primary" {{d.data.object['headless'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用 JS" value="javascript-disabled" lay-skin="primary" {{d.data.object['javascript-disabled'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用图片" value="image-disabled" lay-skin="primary" {{d.data.object['image-disabled'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用插件" value="plugin-disable" lay-skin="primary" {{d.data.object['plugin-disable'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用 Java" value="java-disable" lay-skin="primary" {{d.data.object['java-disable'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="隐身模式" value="incognito" lay-skin="primary" {{d.data.object['incognito'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="沙盒模式" value="sandbox" lay-skin="primary" {{d.data.object['sandbox'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="隐藏滚动条" value="hide-scrollbar" lay-skin="primary" {{d.data.object['hide-scrollbar'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="最大化" value="maximized" lay-skin="primary" {{d.data.object['maximized'] === '1' ? 'checked' : ''}}/>
+					<input type="checkbox" title="禁用 GPU 加速" value="gpu-disable" lay-skin="primary" {{d.data.object['gpu-disable'] === '1' ? 'checked' : ''}}/>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">arguments</label>
+				<div class="layui-input-block">
+					<textarea class="layui-textarea" name="arguments" placeholder="一行一个">{{=d.data.object['arguments']}}</textarea>
+				</div>
+			</div>
+	   	</form>
+    </div>
+  </div>
+</div>

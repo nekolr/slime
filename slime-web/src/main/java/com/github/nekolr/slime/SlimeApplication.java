@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 // 取消 UserDetailsServiceAutoConfiguration 自动配置
-@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class, scanBasePackages = "com.github.nekolr")
 @EnableScheduling
 public class SlimeApplication {
 

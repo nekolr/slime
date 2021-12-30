@@ -39,6 +39,11 @@
             <groupId>com.github.nekolr</groupId>
             <artifactId>slime-auth</artifactId>
         </dependency>
+        <!-- slime-selenium -->
+        <dependency>
+            <groupId>com.github.nekolr</groupId>
+            <artifactId>slime-selenium</artifactId>
+        </dependency>
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
