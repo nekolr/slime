@@ -45,11 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(user, null, null);
 
-                log.info("set Authentication to security context for '{}', uri: {}", username, requestURI);
+                log.debug("set Authentication to security context for '{}', uri: {}", username, requestURI);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } else {
-            log.info("no valid JWT token found, uri: {}", requestURI);
+            log.debug("no valid JWT token found, uri: {}", requestURI);
         }
 
         chain.doFilter(request, response);
