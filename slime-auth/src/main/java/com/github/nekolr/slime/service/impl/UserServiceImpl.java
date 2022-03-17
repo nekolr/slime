@@ -3,25 +3,20 @@ package com.github.nekolr.slime.service.impl;
 import com.github.nekolr.slime.config.UserConfig;
 import com.github.nekolr.slime.entity.User;
 import com.github.nekolr.slime.exception.BadRequestException;
-import com.github.nekolr.slime.security.AuthenticationInfo;
+import com.github.nekolr.slime.security.LoginVo;
+import com.github.nekolr.slime.security.filter.TokenProvider;
 import com.github.nekolr.slime.service.UserService;
-import com.github.nekolr.slime.util.IdGenerator;
-import com.github.nekolr.slime.util.JwtUtils;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.time.Duration;
 import java.util.Objects;
 
 @Component
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Resource
-    private UserConfig userConfig;
-
-    @Value("${jwt.period}")
-    private Duration period;
+    private final UserConfig userConfig;
+    private final TokenProvider tokenProvider;
 
     @Override
     public User findByUsername(String username) {
@@ -32,15 +27,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthenticationInfo login(User user) {
+    public LoginVo login(User user) {
         User entity = findByUsername(user.getUsername());
         if (Objects.isNull(entity) || !user.getPassword().equals(entity.getPassword())) {
             throw new BadRequestException("无效的用户名或密码");
         }
-        // 校验完成后签发 Token
-        String token = JwtUtils.issueJwt(IdGenerator.randomUUID(), user.getUsername(),
-                "", period.getSeconds(), "");
-
-        return new AuthenticationInfo(token, user);
+        String token = tokenProvider.createToken(user.getUsername());
+        return new LoginVo(token, user);
     }
 }

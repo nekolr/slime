@@ -1,9 +1,9 @@
 package com.github.nekolr.slime.controller;
 
 import com.github.nekolr.slime.entity.User;
-import com.github.nekolr.slime.security.AuthenticationInfo;
+import com.github.nekolr.slime.security.LoginVo;
 import com.github.nekolr.slime.service.UserService;
-import com.github.nekolr.slime.util.SecurityContextHolder;
+import com.github.nekolr.slime.util.MySecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +21,13 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationInfo> login(@Validated User user) {
+    public ResponseEntity<LoginVo> login(@Validated User user) {
         return ResponseEntity.ok(userService.login(user));
     }
 
     @GetMapping("/info")
     public ResponseEntity<User> userinfo() {
-        User user = SecurityContextHolder.getUser();
+        User user = MySecurityContextHolder.getCurrentUser();
         return ResponseEntity.ok(user);
     }
 }

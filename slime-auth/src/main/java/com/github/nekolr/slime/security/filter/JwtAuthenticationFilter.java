@@ -1,19 +1,15 @@
 package com.github.nekolr.slime.security.filter;
 
 import com.github.nekolr.slime.entity.User;
-import com.github.nekolr.slime.security.JwtUser;
 import com.github.nekolr.slime.service.UserService;
-import com.github.nekolr.slime.util.JwtUtils;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,64 +22,44 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
+@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    /**
-     * Token 在请求头中的 key
-     */
-    String TOKEN_HEADER_KEY = "Authorization";
+    private static final String TOKEN_HEADER_KEY = "Authorization";
+    private static final String TOKEN_HEADER_VALUE_PREFIX = "Bearer ";
 
-    /**
-     * Token 在请求头中的值的前缀
-     */
-    String TOKEN_HEADER_VALUE_PREFIX = "Bearer ";
-
-
-    @Resource
-    private UserService userService;
+    private final UserService userService;
+    private final TokenProvider tokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        String header = request.getHeader(TOKEN_HEADER_KEY);
+        String requestURI = request.getRequestURI();
+        String jwt = this.resolveToken(request);
 
-        if (StringUtils.isBlank(header) || !header.startsWith(TOKEN_HEADER_VALUE_PREFIX)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        String jwt = StringUtils.replace(header, TOKEN_HEADER_VALUE_PREFIX, "");
-        try {
-            // 只判断 token 合法有效，真正的用户信息通过查询得到
-            JwtUser jwtUser = JwtUtils.parseJwt(jwt);
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            String username = tokenProvider.getUsername(jwt);
             // 只有在 Authentication 为空时才会放入
             if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
-                User user = userService.findByUsername(jwtUser.getUsername());
+                User user = userService.findByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(user, null, null);
 
-                log.debug("Authorized user '{}', setting security context", jwtUser.getUsername());
+                log.info("set Authentication to security context for '{}', uri: {}", username, requestURI);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        } catch (ExpiredJwtException e) {
-            // token 过期
-            log.warn("Token has expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            // token 格式错误
-            log.warn("Token format error: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            // token 构造错误
-            log.warn("Token construct error: {}", e.getMessage());
-        } catch (SignatureException e) {
-            // 签名失败
-            log.warn("Signature failed: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            // 非法参数
-            log.warn("Illegal argument: {}", e.getMessage());
-        } catch (JwtException e) {
-            // 其他异常
-            log.warn("Other exception: {}", e.getMessage());
+        } else {
+            log.info("no valid JWT token found, uri: {}", requestURI);
         }
+
         chain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(TOKEN_HEADER_KEY);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_HEADER_VALUE_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }

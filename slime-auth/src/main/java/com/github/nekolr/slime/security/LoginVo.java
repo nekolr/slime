@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Getter
 @AllArgsConstructor
-public class AuthenticationInfo implements Serializable {
+public class LoginVo implements Serializable {
 
     private String token;
 

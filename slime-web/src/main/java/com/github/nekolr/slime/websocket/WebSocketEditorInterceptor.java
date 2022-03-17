@@ -1,6 +1,6 @@
 package com.github.nekolr.slime.websocket;
 
-import com.github.nekolr.slime.util.JwtUtils;
+import com.github.nekolr.slime.security.filter.TokenProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -13,6 +13,11 @@ import java.util.Map;
 public class WebSocketEditorInterceptor implements HandshakeInterceptor {
 
     private static final String TOKEN_PARAMETER = "token";
+    private final TokenProvider tokenProvider;
+
+    public WebSocketEditorInterceptor(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest req, ServerHttpResponse resp, WebSocketHandler handler, Map<String, Object> attributes) throws Exception {
@@ -23,11 +28,7 @@ public class WebSocketEditorInterceptor implements HandshakeInterceptor {
             if (StringUtils.isBlank(token)) {
                 return false;
             }
-            try {
-                JwtUtils.parseJwt(token);
-            } catch (Exception e) {
-                return false;
-            }
+            return tokenProvider.validateToken(token);
         }
 
         return true;

@@ -1,6 +1,7 @@
 package com.github.nekolr.slime.config;
 
 import com.github.nekolr.slime.Spider;
+import com.github.nekolr.slime.security.filter.TokenProvider;
 import com.github.nekolr.slime.websocket.WebSocketEditorHandler;
 import com.github.nekolr.slime.websocket.WebSocketEditorInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,16 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
+    private TokenProvider tokenProvider;
+
     @Autowired
     public void setSpider(Spider spider) {
         WebSocketEditorHandler.spider = spider;
+    }
+
+    @Autowired
+    public void setTokenProvider(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
     }
 
     @Bean
@@ -30,12 +38,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketEditorHandler(), "/ws").addInterceptors(webSocketEditorInterceptor());
+        registry.addHandler(webSocketEditorHandler(), "/ws").addInterceptors(webSocketEditorInterceptor(tokenProvider));
     }
 
     @Bean
-    public WebSocketEditorInterceptor webSocketEditorInterceptor() {
-        return new WebSocketEditorInterceptor();
+    public WebSocketEditorInterceptor webSocketEditorInterceptor(TokenProvider tokenProvider) {
+        return new WebSocketEditorInterceptor(tokenProvider);
     }
 
     @Bean
