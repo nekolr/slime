@@ -5,19 +5,15 @@ import com.github.nekolr.slime.domain.Function;
 import com.github.nekolr.slime.script.ScriptManager;
 import com.github.nekolr.slime.service.FunctionService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.script.ScriptEngine;
 
 @Service
@@ -46,7 +42,10 @@ public class FunctionServiceImpl implements FunctionService {
 
     @Override
     public Page<Function> findAll(Function entity, Pageable pageable) {
-        return functionRepository.findAll(new Spec(entity), pageable);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withNullHandler(ExampleMatcher.NullHandler.IGNORE)
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING));
+        return functionRepository.findAll(Example.of(entity, matcher), pageable);
     }
 
     @Override
@@ -77,25 +76,5 @@ public class FunctionServiceImpl implements FunctionService {
     @Transactional(rollbackFor = Exception.class)
     public void removeById(Long id) {
         functionRepository.deleteById(id);
-    }
-
-    /**
-     * 条件查询
-     */
-    class Spec implements Specification<Function> {
-
-        private Function function;
-
-        public Spec(Function function) {
-            this.function = function;
-        }
-
-        @Override
-        public Predicate toPredicate(Root<Function> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-            if (StringUtils.isNotBlank(function.getName())) {
-                return cb.and(cb.like(root.get("name").as(String.class), "%" + function.getName() + "%"));
-            }
-            return cb.and(new Predicate[0]);
-        }
     }
 }

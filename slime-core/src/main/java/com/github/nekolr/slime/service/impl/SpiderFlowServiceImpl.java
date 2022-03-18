@@ -18,9 +18,10 @@ import org.quartz.TriggerBuilder;
 import org.quartz.TriggerUtils;
 import org.quartz.spi.OperableTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -30,10 +31,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -147,11 +144,6 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
     }
 
     @Override
-    public Page<SpiderFlow> findAll(Pageable pageable) {
-        return spiderFlowRepository.findAll(pageable);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateNextExecuteTime(SpiderFlow flow) {
         spiderFlowRepository.updateNextExecuteTime(flow.getNextExecuteTime(), flow.getId());
@@ -159,7 +151,10 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
 
     @Override
     public Page<SpiderFlow> findAll(SpiderFlow flow, Pageable pageable) {
-        return spiderFlowRepository.findAll(new Spec(flow), pageable);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withNullHandler(ExampleMatcher.NullHandler.IGNORE)
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING));
+        return spiderFlowRepository.findAll(Example.of(flow, matcher), pageable);
     }
 
     @Override
@@ -274,26 +269,5 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
             throw new RuntimeException("读取日志文件出错", e);
         }
         return lines;
-    }
-
-    /**
-     * 条件查询
-     */
-    class Spec implements Specification<SpiderFlow> {
-
-        private SpiderFlow flow;
-
-        public Spec(SpiderFlow flow) {
-            this.flow = flow;
-        }
-
-        @Override
-        public Predicate toPredicate(Root<SpiderFlow> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-            List<Predicate> predicates = new ArrayList<>();
-            if (StringUtils.isNotBlank(flow.getName())) {
-                predicates.add(cb.like(root.get("name").as(String.class), "%" + flow.getName() + "%"));
-            }
-            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-        }
     }
 }

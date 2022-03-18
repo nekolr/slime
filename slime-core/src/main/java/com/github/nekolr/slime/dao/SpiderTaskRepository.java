@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface SpiderTaskRepository extends JpaRepository<SpiderTask, Long>, JpaSpecificationExecutor<SpiderTask> {
 
-    @Query("select id from SpiderTask where flowId = :flowId order by endTime desc")
-    List<Long> findTaskIdByFlowId(@Param("flowId") Long flowId);
+    @Query(value = "select id from SpiderTask where flowId = :flowId order by endTime desc")
+    List<Long> findTaskIdByFlowIdOrderByEndTimeDesc(@Param("flowId") Long flowId);
+
 }

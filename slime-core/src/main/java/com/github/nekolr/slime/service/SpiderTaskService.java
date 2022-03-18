@@ -4,9 +4,15 @@ import com.github.nekolr.slime.domain.SpiderTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface SpiderTaskService extends BaseService<SpiderTask> {
+public interface SpiderTaskService {
 
-    Page<SpiderTask> findAll(SpiderTask task, Pageable pageable);
+    void removeById(Long id);
+
+    SpiderTask getById(Long id);
+
+    SpiderTask save(SpiderTask task);
 
     Long getMaxTaskIdByFlowId(Long flowId);
+
+    Page<SpiderTask> findAll(SpiderTask task, Pageable pageable);
 }

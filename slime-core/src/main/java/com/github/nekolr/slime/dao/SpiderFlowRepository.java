@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface SpiderFlowRepository extends JpaRepository<SpiderFlow, Long>, JpaSpecificationExecutor<SpiderFlow> {
 
-    List<SpiderFlow> findByJobEnabled(Boolean jobEnabled);
-
     List<SpiderFlow> findByIdNot(Long flowId);
+
+    List<SpiderFlow> findByJobEnabled(Boolean jobEnabled);
 
     @Modifying
     @Query(value = "update SpiderFlow sf set sf.nextExecuteTime = null")
