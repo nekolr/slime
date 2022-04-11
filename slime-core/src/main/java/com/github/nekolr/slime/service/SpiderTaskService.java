@@ -14,5 +14,7 @@ public interface SpiderTaskService {
 
     Long getMaxTaskIdByFlowId(Long flowId);
 
+    Integer getRunningCountByFlowId(Long flowId);
+
     Page<SpiderTask> findAll(SpiderTask task, Pageable pageable);
 }

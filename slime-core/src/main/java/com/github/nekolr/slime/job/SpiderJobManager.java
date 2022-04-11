@@ -74,8 +74,6 @@ public class SpiderJobManager {
      */
     public boolean removeJob(Long flowId) {
         try {
-            quartzScheduler.pauseTrigger(getTriggerKey(flowId));
-            quartzScheduler.unscheduleJob(getTriggerKey(flowId));
             quartzScheduler.deleteJob(getJobKey(flowId));
             return true;
         } catch (SchedulerException e) {

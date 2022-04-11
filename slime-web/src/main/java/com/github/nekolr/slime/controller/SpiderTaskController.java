@@ -35,4 +35,13 @@ public class SpiderTaskController {
         spiderTaskService.removeById(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/stop")
+    public ResponseEntity stop(Long id) {
+        SpiderContext context = SpiderJob.getSpiderContext(id);
+        if (context != null) {
+            context.setRunning(false);
+        }
+        return ResponseEntity.ok().build();
+    }
 }

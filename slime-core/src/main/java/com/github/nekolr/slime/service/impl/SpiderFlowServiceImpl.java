@@ -154,7 +154,9 @@ public class SpiderFlowServiceImpl implements SpiderFlowService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withNullHandler(ExampleMatcher.NullHandler.IGNORE)
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING));
-        return spiderFlowRepository.findAll(Example.of(flow, matcher), pageable);
+        Page<SpiderFlow> page = spiderFlowRepository.findAll(Example.of(flow, matcher), pageable);
+        page.get().forEach(sf -> sf.setRunningCount(spiderTaskService.getRunningCountByFlowId(sf.getId())));
+        return page;
     }
 
     @Override

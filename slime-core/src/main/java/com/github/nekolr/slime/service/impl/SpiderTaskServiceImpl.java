@@ -34,6 +34,11 @@ public class SpiderTaskServiceImpl implements SpiderTaskService {
     }
 
     @Override
+    public Integer getRunningCountByFlowId(Long flowId) {
+        return spiderTaskRepository.countByFlowIdAndEndTimeIsNull(flowId);
+    }
+
+    @Override
     public Long getMaxTaskIdByFlowId(Long flowId) {
         return spiderTaskRepository.findTaskIdByFlowIdOrderByEndTimeDesc(flowId).stream().findFirst().orElse(null);
     }
