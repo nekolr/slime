@@ -49,6 +49,8 @@
         <jjwt.version>0.11.2</jjwt.version>
         <rome.version>1.15.0</rome.version>
         <h2.version>1.4.200</h2.version>
+        <mysql.driver.version>8.0.28</mysql.driver.version>
+        <postgresql.driver.version>42.2.24</postgresql.driver.version>
         <selenium.version>4.1.1</selenium.version>
         <!-- 项目版本号 -->
         <revision>0.1.0</revision>
@@ -171,6 +173,18 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
+            </dependency>
+            <!-- mysql database -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.driver.version}</version>
+            </dependency>
+            <!-- postgresql database -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.driver.version}</version>
             </dependency>
             <!-- selenium -->
             <dependency>

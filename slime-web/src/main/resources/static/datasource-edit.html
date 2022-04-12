@@ -39,13 +39,10 @@
    			<div class="layui-input-block">
 				<select name="driverClassName" lay-search  lay-verify="required">
 					<option value=""></option>
+					<option value="org.h2.Driver">org.h2.Driver</option>
 					<option value="com.mysql.jdbc.Driver">com.mysql.jdbc.Driver</option>
-					<option value="org.hsqldb.jdbcDriver">org.hsqldb.jdbcDriver</option>
+					<option value="com.mysql.cj.jdbc.Driver">com.mysql.cj.jdbc.Driver</option>
 					<option value="org.postgresql.Driver">org.postgresql.Driver</option>
-					<option value="oracle.jdbc.driver.OracleDriver">oracle.jdbc.driver.OracleDriver</option>
-					<option value="com.ibm.db2.jcc.DB2Driver">com.ibm.db2.jcc.DB2Driver</option>
-					<option value="com.microsoft.sqlserver.jdbc.SQLServerDriver">com.microsoft.sqlserver.jdbc.SQLServerDriver</option>
-					<option value="com.sybase.jdbc3.jdbc.SybDriver">com.sybase.jdbc3.jdbc.SybDriver</option>
 				</select>
    			</div>
    		</div>
@@ -160,14 +157,17 @@
 					username : $("input[name=username]").val(),
 					password : $("input[name=password]").val()
 				},
-				success : function(data){
-					layui.layer.msg(data);
+				success : function(data) {
+					layui.layer.msg("连接成功");
 				},
-				error : function(errorInfo){
+				error : function(errorInfo) {
 					if (errorInfo.responseText !== null && errorInfo.responseText !== '') {
-						layui.layer.msg(errorInfo.responseText);
+						var json = JSON.parse(errorInfo.responseText);
+						if (json.message) {
+							layui.layer.msg(json.message);
+						}
 					} else {
-						layui.layer.msg('请求失败');
+						layui.layer.msg('连接失败');
 					}
 				}
 			});
