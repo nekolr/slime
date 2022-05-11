@@ -37,7 +37,7 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">变量值</label>
 		<div class="layui-input-block">
-			<input type="text" name="value" placeholder="请输入变量值" autocomplete="off" class="layui-input" lay-verify="required"/>
+			<input type="text" name="val" placeholder="请输入变量值" autocomplete="off" class="layui-input" lay-verify="required"/>
 		</div>
 	</div>
 	<div class="layui-form-item layui-form-text">
@@ -75,7 +75,7 @@
 			data : {
 				id : varId,
 				name : $("input[name=name]").val(),
-				value : $("input[name=value]").val(),
+				val : $("input[name=val]").val(),
 				description : $("textarea[name=description]").val()
 			},
 			success : function(){
