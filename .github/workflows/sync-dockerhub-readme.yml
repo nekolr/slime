@@ -30,7 +30,4 @@ jobs:
           repository: nekolr/slime
           
           # Docker Hub repository short description Input exceeding 100 characters will be truncated
-          short-description: 🍰 A visual crawler management platform
-          
-          # Path to the repository readme Default: `./README.md`
-          readme-filepath: ./README.md
+          short-description: ${{ github.event.repository.description }}
