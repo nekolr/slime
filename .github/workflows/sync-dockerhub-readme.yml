@@ -1,0 +1,36 @@
+name: sync dockerhub readme
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Docker Hub Description
+      
+        uses: peter-evans/dockerhub-description@v3.0.0
+        
+        with:
+        
+          # Docker Hub username
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          
+          # Docker Hub password
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+          # Docker Hub repository in the format `<namespace>/<name>` Default: `github.repository`
+          repository: nekolr/slime
+          
+          # Docker Hub repository short description Input exceeding 100 characters will be truncated
+          short-description: 🍰 A visual crawler management platform
+          
+          # Path to the repository readme Default: `./README.md`
+          readme-filepath: ./README.md
