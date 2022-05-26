@@ -7,6 +7,9 @@
   <a href="https://github.com/nekolr/slime/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/nekolr/slime?style=flat-square" alt="license">
   </a>
+  <a href="https://hub.docker.com/r/nekolr/slime">
+    <img src="https://img.shields.io/docker/v/nekolr/slime?label=docker%20image&style=flat-square" alt="docker image">
+  </a>
   <a href="https://github.com/nekolr/slime/releases">
     <img src="https://img.shields.io/github/v/release/nekolr/slime?style=flat-square&color=blueviolet&include_prereleases" alt="release">
   </a>
