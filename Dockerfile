@@ -1,5 +1,4 @@
-# https://github.com/nekolr/maven-image/tree/master/3.6.1-jdk-8-slim
-FROM nekolr/maven:3.6.1-jdk-8-slim AS build
+FROM 3.6.1-jdk-8-slim AS build
 
 RUN mkdir -p /usr/src/app
 
