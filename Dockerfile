@@ -1,4 +1,4 @@
-FROM 3.6.1-jdk-8-slim AS build
+FROM maven:3.6.1-jdk-8-slim AS build
 
 RUN mkdir -p /usr/src/app
 
