@@ -2,6 +2,7 @@ package com.github.nekolr.driver;
 
 import com.github.nekolr.slime.constant.Constants;
 import com.github.nekolr.slime.model.SpiderNode;
+import com.github.nekolr.slime.util.IoUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -9,10 +10,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.*;
 import org.springframework.stereotype.Component;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ChromeDriverProvider implements DriverProvider {
@@ -119,7 +123,15 @@ public class ChromeDriverProvider implements DriverProvider {
         options.setExperimentalOption("excludeSwitches", Collections.singleton("enable-automation"));
 
         String remoteWebdriverUrl = node.getJsonProperty(REMOTE_WEBDRIVER_URL, DEFAULT_REMOTE_WEBDRIVER_URL);
-        WebDriver driver = new RemoteWebDriver(new URL(remoteWebdriverUrl), options);
+        WebDriver driver = new CdpRemoteWebDriver(new URL(remoteWebdriverUrl), options);
+
+        InputStream input = ChromeDriverProvider.class.getClassLoader().getResourceAsStream("stealth.min.js");
+        String source = IoUtils.readStreamToString(input);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("source", source);
+
+        ((CdpRemoteWebDriver) driver).executeCdpCommand("Page.addScriptToEvaluateOnNewDocument", params);
 
         return driver;
     }
