@@ -1,0 +1,46 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: generate stealth.min.js
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.10.0]
+
+    steps:
+      - name: Checkout Codes
+        uses: actions/checkout@v3
+
+      - name: Prepare Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build Script
+        run: |
+          npx extract-stealth-evasions
+
+      - name: Add File to Repo
+        run: |
+          git config --global user.email github-action@github.com
+          git config --global user.name github-action
+          git clone https://github.com/nekolr/slime.git code
+          cp stealth.min.js ./code/slime-web/src/main/resources
+          cd /home/runner/work/slime/code
+          git add .
+          git commit -m '🤖 auto-updated by workflow'
+
+      - name: Push Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.SLIME_TOKEN }}
