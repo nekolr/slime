@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,17 @@ public class VariableServiceImpl implements VariableService {
         Variable variable = variableRepository.save(entity);
         this.resetGlobalVariables();
         return variable;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(String variableName, String variableValue) {
+        Variable variable = variableRepository.findByName(variableName);
+        if (Objects.nonNull(variable)) {
+            variable.setVal(variableValue);
+            variableRepository.save(variable);
+            ExpressionGlobalVariables.update(variableName, variableValue);
+        }
     }
 
     @Override

@@ -22,6 +22,24 @@ public class ExpressionGlobalVariables {
         }
     }
 
+    public static void update(String key, String value) {
+        Lock writeLock = readWriteLock.writeLock();
+        writeLock.lock();
+        try {
+            Lock readLock = readWriteLock.readLock();
+            readLock.lock();
+            try {
+                if (variables.containsKey(key)) {
+                    variables.put(key, value);
+                }
+            } finally {
+                readLock.unlock();
+            }
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
     public static Map<String, String> getVariables() {
         Lock lock = readWriteLock.readLock();
         lock.lock();

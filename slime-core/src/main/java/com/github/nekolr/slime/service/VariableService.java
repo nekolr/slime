@@ -12,6 +12,8 @@ public interface VariableService {
 
     Variable save(Variable entity);
 
+    void update(String variableName, String VariableValue);
+
     Page<Variable> findAll(Pageable pageable);
 
 }
