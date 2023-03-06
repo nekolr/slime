@@ -35,7 +35,7 @@ jobs:
           git config --global user.email github-action@github.com
           git config --global user.name github-action
           git clone https://github.com/nekolr/slime.git code
-          cp stealth.min.js ./code/slime-web/src/main/resources
+          cp -f stealth.min.js ./code/slime-web/src/main/resources
           cd /home/runner/work/slime/code
           git add .
           git commit -m '🤖 auto-updated by workflow'
