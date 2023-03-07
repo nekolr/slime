@@ -51,7 +51,7 @@
         <h2.version>1.4.200</h2.version>
         <mysql.driver.version>8.0.28</mysql.driver.version>
         <postgresql.driver.version>42.2.24</postgresql.driver.version>
-        <selenium.version>4.5.3</selenium.version>
+        <selenium.version>4.8.1</selenium.version>
         <!-- 项目版本号 -->
         <revision>0.3.0</revision>
     </properties>
